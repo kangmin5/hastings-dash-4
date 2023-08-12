@@ -6,7 +6,7 @@ import { DataGrid, GridRowId } from '@mui/x-data-grid'
 import { Button, Card, FormControl, Link, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { useRouter } from 'next/router'
 import { selectItemCount, selectAllOrders } from 'app/orders/org/order-org/order-selector'
-import { getOrderById } from 'app/orders/org/order-org/order-thunk'
+import { getAllOrders } from 'app/orders/org/order-org/order-thunk'
 import { useSelector } from 'react-redux'
 
 
@@ -14,7 +14,7 @@ interface Parameters {
   post: string;
 }
 
-const OrderPage: NextPage = ({ post }: Parameters) => {
+const OrderAddPage: NextPage = ({ post }: Parameters) => {
   const [pageSize, setPageSize] = React.useState(10)
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -23,7 +23,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
   const [selectedRows, setSelectedRows] = React.useState<GridRowId[]>([])
 
   React.useEffect(() => {
-    dispatch(getOrderById(undefined))
+    dispatch(getAllOrders(undefined))
   }, [dispatch, router.query])
 
 
@@ -31,7 +31,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
   return (
     <>
       <div className='tit-area'>
-        <h2 className='h2 mb0'>주문 상세</h2>
+        <h2 className='h2 mb0'>주문 등록</h2>
         <div className='btn-group'>
           <Button variant='outlined' size='medium' color='info'>
             영수증 발행
@@ -51,102 +51,12 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
         </div>
       </div>
       <div style={{ padding: '24px', backgroundColor: '#fff', borderRadius: '6px' }}>
-        <div className='tbl-list' style={{ padding: '0' }}>
-          <table>
-            <caption>주문 상세</caption>
-            <colgroup>
-              <col width='3%' />
-              <col width='15%' />
-              <col width='10%' />
-              <col width='10%' />
-              <col width='5%' />
-              <col width='10%' />
-              <col width='10%' />
-              <col width='10%' />
-              <col width='15%' />
-              <col width='12%' />
-            </colgroup>
-            <thead>
-              <tr>
-                <th scope='col' className='tac'>No.</th>
-                <th scope='col'>상품명</th>
-                <th scope='col'>선택사항</th>
-                <th scope='col'>선택사항2</th>
-                <th scope='col' className='tac'>
-                  수량
-                </th>
-                <th scope='col' className='tar'>
-                  적립 예정포인트
-                </th>
-                <th scope='col' className='tar r-line'>
-                  금액
-                </th>
-                <th scope='col'>유입경로</th>
-                <th scope='col'>검색앤잔</th>
-                <th scope='col'>검색어</th>
-              </tr>
-            </thead>
-            <tfoot>
-              <tr>
-                <td className='tac' />
-                <td>
-                  <strong className='point'>총합</strong>
-                </td>
-                <td />
-                <td />
-                <td className='tac'>2</td>
-                <td />
-                <td className='tar r-line'>
-                  <strong className='point'>22,060원</strong>
-                </td>
-                <td colSpan={3} />
-              </tr>
-            </tfoot>
-            <tbody>
-              <tr>
-                <td className='tac'>1</td>
-                <td>OPP접착봉투 23*35+4</td>
-                <td>200장(기본)</td>
-                <td />
-                <td className='tac'>1</td>
-                <td className='tar'>7원</td>
-                <td className='tar r-line'>780원</td>
-                <td />
-                <td>m.search.naver.com</td>
-                <td>opp비닐포장지</td>
-              </tr>
-              <tr>
-                <td className='tac'>2</td>
-                <td>OPP접착봉투 9*10+4</td>
-                <td>10,000장(박스)</td>
-                <td />
-                <td className='tac'>1</td>
-                <td className='tar'>7원</td>
-                <td className='tar r-line'>780원</td>
-                <td />
-                <td />
-                <td />
-              </tr>
-              <tr>
-                <td />
-                <td>배송료</td>
-                <td />
-                <td />
-                <td />
-                <td />
-                <td className='tar r-line'>2,750원</td>
-                <td />
-                <td />
-                <td />
-              </tr>
-            </tbody>
-          </table>
-        </div>
+
         <Card className='register-box purchase-orders detail'>
           <form onSubmit={e => e.preventDefault()}>
             <div className='h3-back-styled'>
               <h3>주문 번호</h3>
-              <span className='order-num'>20230501190305-9288514194</span>
+              <span className='order-num'> <TextField className='x-small' />- <TextField className='x-small' /></span>
             </div>
             <div className='tbl-view type2'>
               <table>
@@ -159,7 +69,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
                   <tr>
                     <th scope='row'>주문일</th>
                     <td>
-                      <p>2023-05-01 19:03:05</p>
+                    <TextField className='x-small' />
                     </td>
                   </tr>
                   <tr>
@@ -168,14 +78,14 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
                       <div className='flex sc'>
                         {/* [Dev] 기업회원일 경우에만 아이콘 표시 */}
                         <span className='badge ico-b mr8' />
-                        <p>혜윰 / hyeume</p>
+                        <TextField className='x-small' />
                       </div>
                     </td>
                   </tr>
                   <tr>
                     <th scope='row'>회사명</th>
                     <td>
-                      <p>(주)한결크린텍</p>
+                      <p> <TextField className='x-small' /></p>
                     </td>
                   </tr>
                   <tr>
@@ -218,7 +128,8 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
                   <tr>
                     <th scope='row'>누적주문</th>
                     <td>
-                      <p>총 주문횟수 : 97회&nbsp;&nbsp; 총 주문금액 : 4,826,910원 (배송완료 기준)</p>
+                      <p>총 주문횟수 :  <TextField className='x-small' />회&nbsp;&nbsp;
+                      총 주문금액 :  <TextField className='x-small' />원 (배송완료 기준)</p>
                     </td>
                   </tr>
                 </tbody>
@@ -315,7 +226,10 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
                 <tbody>
                   <tr>
                     <th scope='row'>결제방법</th>
-                    <td>무통장입금 【 국민은행 522337-01-005496 (예금주:장영석) 】</td>
+                    <td> <TextField className='x-small' />
+                     【  <TextField className='x-small' />
+                     <TextField className='x-small' />
+                     (예금주: <TextField className='x-small' />) 】</td>
                   </tr>
                   <tr>
                     <th scope='row'>입금자</th>
@@ -331,14 +245,14 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
                   <tr>
                     <th scope='row'>결제상태</th>
                     <td>
-                      <span className='point'>미입금</span>
+                      <span className='point'> <TextField className='x-small' /></span>
                     </td>
                   </tr>
                   <tr>
                     <th scope='row'>현금영수증</th>
                     <td>
                       <div className='form-wrap'>
-                        발급완료
+                      <TextField className='x-small' />
                         <div className='btn-group'>
                           <Button variant='outlined' color='info' size='small'>
                             정보 상세
@@ -368,7 +282,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
                   <tr>
                     <th scope='row'>배송처리여부</th>
                     <td>
-                      <span className='point'>미처리</span>
+                      <span className='point'> <TextField className='x-small' /></span>
                     </td>
                   </tr>
                   <tr>
@@ -376,7 +290,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
                     <td>
                       <div className='form-wrap'>
                         <Select defaultValue='all' sx={{ width: 160 }}>
-                          <MenuItem value='all'>없음</MenuItem>
+                          <MenuItem value='all'> <TextField className='x-small' /></MenuItem>
                         </Select>
                         <TextField className='medium' value='' />
                         <Button variant='outlined' color='info' size='small'>
@@ -414,5 +328,5 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
     </>
   )
 }
-export default OrderPage;
+export default OrderAddPage;
 

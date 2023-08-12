@@ -67,7 +67,9 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
         minWidth: 80,
         headerName: 'ID/주문번호',
         renderCell({ row }: CellType) {
-          return <Typography variant='body2'>{row.user.userId}</Typography>
+          return <Typography variant='body2'>
+            <Link href={'/orders/order/'+row.oar.id}>
+            {row.oar.id}</Link></Typography>
         }
       },
       {
@@ -264,7 +266,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
             </FormControl>
           </td>
         </tr>
-        <tr>
+        {/* <tr>
           <td>
           <select name='order'>
             <option value='all'>전체주문</option>
@@ -315,7 +317,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
             <option value='inflow_route'>유입경로</option>
           </select>
           </td>
-        </tr>
+        </tr> */}
       </TableBody>
     </Table>
   </div>

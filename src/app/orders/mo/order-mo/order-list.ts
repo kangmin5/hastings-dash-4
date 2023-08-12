@@ -11,46 +11,22 @@ import { ParBuilder } from 'app/products/atom/par-atom'
 export class OrderList implements StrategyType<OrderVo[]> {
   handle(args?: any): OrderVo[] {
     const arr: OrderVo[] = []
-  
-    console.log(' &&&&&&&&&&& args ', JSON.stringify(args))
 
-
-/*
-[
-  {
-    "createdAt": "2023-06-27 14:56:08",
-    "customerJson": {
-      "userId": "test002"
-    },
-    "funnel": "아직구현안됨",
-    "id": 7,
-    "orderCount": 2,
-    "orderer": "강민",
-    "paymentJson": {
-      "payMethod": "카드",
-      "totalPurchaseAmount": 5000
-    },
-    "productName": "OPP헤다봉투 18*(3+25)+4",
-    "quantity": 1,
-    "status": "미처리"
-  }
-]
-*/
 
     const len = args.length
     let i = 0
     for (; i < len; i++) {
-      const id = args[i].id
-      const createdAt = args[i].createdAt
-      const userId = args[i].customerJson.userId
-      const f1 = args[i].funnel
-      const orderCount = args[i].orderCount
-      const orderer = args[i].orderer
-      const payMethod = args[i].paymentJson.payMethod
-      const totalPurchaseAmount = args[i].paymentJson.totalPurchaseAmount
-      const productName = args[i].productName
-      const quantity = args[i].quantity
-      const status = args[i].status
+      const id = args[i].idAtom.id
+      const createdAt = args[i].atAtom.createdAt
+      const userId = args[i].userAtom.userId
+      const f1 = args[i].funnel  //**TODO  */
+      const orderCount = args[i].countAtom.orderCount
+      const orderer = args[i].personAtom.name
+      const payMethod = args[i].payAtom.payMethod
+      const payAmount = args[i].payAtom.payAmount
+      const productName = args[i].nameAtom.name //**TODO  */
+      const quantity = args[i].countAtom.quantity
+      const status = args[i].txAtom.status
 
       console.log(' &&&&&&&&&&& id ', id)
       console.log(' &&&&&&&&&&& createdAt ', createdAt)
@@ -59,15 +35,10 @@ export class OrderList implements StrategyType<OrderVo[]> {
       console.log(' &&&&&&&&&&& orderCount ', orderCount)
       console.log(' &&&&&&&&&&& orderer ', orderer)
       console.log(' &&&&&&&&&&& payMethod ', payMethod)
-      console.log(' &&&&&&&&&&& totalPurchaseAmount ', totalPurchaseAmount)
+      console.log(' &&&&&&&&&&& totalPurchaseAmount ', payAmount)
       console.log(' &&&&&&&&&&& productName ', productName)
       console.log(' &&&&&&&&&&& quantity ', quantity)
       console.log(' &&&&&&&&&&& status ', status)
-
-
-
-
-
 
       const oar = new OarBuilder()
         .id(id)
@@ -90,7 +61,7 @@ export class OrderList implements StrategyType<OrderVo[]> {
 
       const calc = new CalcBuilder()
       .orderCountPerUser(orderCount)
-      .orderAmount(totalPurchaseAmount)
+      .orderAmount(payAmount)
       .build()
 
       const fee = new FeeBuilder()

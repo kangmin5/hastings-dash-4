@@ -7,41 +7,39 @@ export default function navigation(): VerticalNavItemsType {
     },
     {
       id: '1',
-      title: '전체 주문 목록',
-      path: '/orders/order'
-
-      // children: [
-      //   {
-      //     id: '1',
-      //     title: '전체주문 목록',
-      //     path: `${Actors.order_taker}/paid-orders`
-      //   },
-      //   {
-      //     id: '2',
-      //     title: '입금주문 관리',
-      //     path: `${Actors.order_taker}/paid-orders`
-      //   },
-      //   {
-      //     id: '3',
-      //     title: '고객별 입금주문 관리',
-      //     path: `${Actors.order_taker}/paid-orders/by-customer`
-      //   },
-      //   {
-      //     id: '4',
-      //     title: '미입금주문 관리',
-      //     path: `${Actors.order_taker}/unpaid-orders`
-      //   },
-      //   {
-      //     id: '5',
-      //     title: '미확정 입금주문 관리',
-      //     path: `${Actors.order_taker}/unpaid-orders/unconfirmed`
-      //   },
-      //   {
-      //     id: '6',
-      //     title: '입금주문 등록',
-      //     path: `${Actors.order_taker}/paid-orders/add`
-      //   }
-      // ]
+      title: '전체 주문 관리',
+      children: [
+        {
+          id: '1',
+          title: '전체주문 목록',
+          path: `/orders/order`
+        },
+        {
+          id: '2',
+          title: '입금주문 관리',
+          path: `/orders/paid-orders`
+        },
+        {
+          id: '3',
+          title: '고객별 입금주문 관리',
+          path: `/orders/paid-orders/by-customer`
+        },
+        {
+          id: '4',
+          title: '미입금주문 관리',
+          path: `/orders/unpaid-orders`
+        },
+        {
+          id: '5',
+          title: '미확정 입금주문 관리',
+          path: `/orders/unpaid-orders/unconfirmed`
+        },
+        {
+          id: '6',
+          title: '입금주문 등록',
+          path: `/orders/order-add`
+        }
+      ]
     },
     {
       id: '2',
@@ -106,17 +104,6 @@ export default function navigation(): VerticalNavItemsType {
         }
       ]
     },
-    {
-      id: '4',
-      title: '주문 관리',
-      children: [
-        {
-          id: '1',
-          title: '전체 주문 목록',
-          path: '/orders/order'
-        },
 
-      ]
-    }
   ]
 }
