@@ -5,10 +5,12 @@ import { selectNoticeImages } from 'app/boards/org/notice-org/notice-selector'
 import { addNoticeImage } from 'app/boards/org/notice-org/notice-thunk'
 import { useAppDispatch } from 'custom-hooks'
 import { useSelector } from 'react-redux'
-import ReactQuill from 'react-quill';  // ssr 설정을 위해 주석처리
+import ReactQuill, {Quill} from 'react-quill';  // ssr 설정을 위해 주석처리
 // const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 import 'react-quill/dist/quill.snow.css';
 import { RangeStatic } from 'quill';
+import ImageResize from 'quill-image-resize';
+Quill.register('modules/ImageResize', ImageResize);
 import axios from 'axios'
 
 interface IEditor {
@@ -22,7 +24,6 @@ const NoticeEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr}) => {
   const NoticeImages = useSelector(selectNoticeImages)
   const quillRef = React.useRef<ReactQuill>(null);
 
-  const addImage = 'http://3.34.85.184/' + url.addImage
 
   // 이미지 업로드 핸들러, modules 설정보다 위에 있어야 정상 적용
   const imageHandler = () => {
@@ -76,7 +77,7 @@ const NoticeEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr}) => {
         } else {
           console.log('quillRef.current is null')
         }
-        
+
       }).catch((err) => {
         console.log('axios error : ', JSON.stringify(err))
         return err
@@ -94,10 +95,13 @@ const NoticeEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr}) => {
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }], // header 설정
         ['bold', 'italic', 'underline', 'strike', 'blockquote', 'code-block', 'formula'], // 굵기, 기울기, 밑줄 등 부가 tool 설정
         [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }], // 리스트, 인덴트 설정
-        ['link', 'image', 'video'], // 링크, 이미지, 비디오 업로드 설정
+       // ['link', 'image', 'video'], // 링크, 이미지, 비디오 업로드 설정
         [{ 'align': [] }, { 'color': [] }, { 'background': [] }], // 정렬, 글씨 색깔, 글씨 배경색 설정
         ['clean'], // toolbar 설정 초기화 설정
       ],
+      ImageResize: {
+        parchment: Quill.import('parchment')
+      },
 
       // custom 핸들러 설정
       handlers: {
@@ -106,6 +110,8 @@ const NoticeEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr}) => {
     },
   }
   ), [])
+
+
 
   const formats = [
     'font',
@@ -131,10 +137,10 @@ const NoticeEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr}) => {
   };
 
   const style = {
-    height: "100%",
+    height: "80%",
     width: "100%",
     margin: "auto",
-    borderStyle: "double"
+
   };
 
 

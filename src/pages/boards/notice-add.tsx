@@ -47,11 +47,28 @@ import Link from 'next/link';
 // ** Components Imports
 // import { DragDrop } from 'views'
 
+// 해당 인터페이스는 컴포넌트 밖에 작성해주세요!
+interface IFileTypes {
+  id: number; // 파일들의 고유값 id
+  object: File;
+}
+
 // ** 016. customer-service / messenger / register-notice 공지사항 등록
 const NoticeAddPage: NextPage = () => {
+
+  const [files, setFiles] = React.useState<IFileTypes[]>([]);
   // ** next ReferenceError: window is not defined 해결 방법
   const dispatch = useAppDispatch()
   const [isChecked, setIsChecked] = React.useState(false)
+
+    // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
+    const [isDragging, setIsDragging] = React.useState<boolean>(false);
+
+    // 각 선택했던 파일들의 고유값 id
+    const fileId = React.useRef<number>(0);
+
+    // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
+    const dragRef = React.useRef<HTMLLabelElement | null>(null);
 
 
   const Zoo: any = z.object({
@@ -84,7 +101,7 @@ const NoticeAddPage: NextPage = () => {
   } = useForm();
   const onSubmit: SubmitHandler<any> = (data) => {
     console.log('공지사항 전송 테스트')
-    console.log(roof.current) 
+    console.log(roof.current)
 
     console.log('1--------\n', JSON.stringify(data))
 
@@ -179,8 +196,102 @@ const notice = new NoticeBo()
       //roof.current.innerHTML += htmlStr;
     }
 
-    
+
   }, [htmlStr])
+
+
+  const handleDragIn = useCallback((e: DragEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDragOut = useCallback((e: DragEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsDragging(false);
+  }, []);
+
+  const handleDragOver = useCallback((e: DragEvent): void => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (e.dataTransfer!.files) {
+      setIsDragging(true);
+    }
+  }, []);
+
+  const onChangeFiles = useCallback((e: React.ChangeEvent<HTMLInputElement> | any): void => {
+    let selectFiles: File[] = [];
+    let tempFiles: IFileTypes[] = files;
+    // temp 변수를 이용하여 선택했던 파일들을 담습니다.
+
+    // 드래그 했을 때와 안했을 때 가리키는 파일 배열을 다르게 해줍니다.
+    if (e.type === "drop") {
+      // 드래그 앤 드롭 했을때
+      selectFiles = e.dataTransfer.files;
+    } else {
+      // "파일 첨부" 버튼을 눌러서 이미지를 선택했을때
+      selectFiles = e.target.files;
+    }
+
+    for (const file of selectFiles) {
+      // 스프레드 연산자를 이용하여 기존에 있던 파일들을 복사하고, 선택했던 파일들을 append 해줍니다.
+      tempFiles = [
+        ...tempFiles,
+        {
+          id: fileId.current++, // fileId의 값을 1씩 늘려주면서 각 파일의 고유값으로 사용합니다.
+          object: file // object 객체안에 선택했던 파일들의 정보가 담겨있습니다.
+        }
+      ];
+    }
+
+    setFiles(tempFiles);
+  }, [files]); // 위에서 선언했던 files state 배열을 deps에 넣어줍니다.
+
+  const handleDrop = useCallback(
+    (e: DragEvent): void => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      onChangeFiles(e);
+      setIsDragging(false);
+    },
+    [onChangeFiles]
+  );
+
+  const initDragEvents = useCallback((): void => {
+    // 앞서 말했던 4개의 이벤트에 Listener를 등록합니다. (마운트 될때)
+
+    if (dragRef.current !== null) {
+      dragRef.current.addEventListener("dragenter", handleDragIn);
+      dragRef.current.addEventListener("dragleave", handleDragOut);
+      dragRef.current.addEventListener("dragover", handleDragOver);
+      dragRef.current.addEventListener("drop", handleDrop);
+    }
+  }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
+
+  const resetDragEvents = useCallback((): void => {
+    // 앞서 말했던 4개의 이벤트에 Listener를 삭제합니다. (언마운트 될때)
+
+    if (dragRef.current !== null) {
+      dragRef.current.removeEventListener("dragenter", handleDragIn);
+      dragRef.current.removeEventListener("dragleave", handleDragOut);
+      dragRef.current.removeEventListener("dragover", handleDragOver);
+      dragRef.current.removeEventListener("drop", handleDrop);
+    }
+  }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
+
+  const handleFilterFile = useCallback((id: number): void => {
+    // 매개변수로 받은 id와 일치하지 않는지에 따라서 filter 해줍니다.
+    setFiles(files.filter((file: any) => file.id !== id));
+  }, [files]);
+
+  React.useEffect(() => {
+    initDragEvents();
+
+    return () => resetDragEvents();
+  }, [initDragEvents, resetDragEvents]);
 
 
   const cook = (htmlString: string) => {
@@ -198,7 +309,7 @@ const notice = new NoticeBo()
       <Typography variant='h2'>공지사항 관리</Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Card className='register-box'>
-  
+
           <Box className='h3-back-styled'>
             <h3>공지사항 등록</h3>
           </Box>
@@ -213,7 +324,7 @@ const notice = new NoticeBo()
               <TableBody>
                 <tr>
                   <th scope='row'>게시여부</th>
-                  <td>
+                  <td colSpan={2}>
                     <FormControl component="fieldset"  >
                       <Controller
                       {...register("article.isPosted")}
@@ -236,10 +347,10 @@ const notice = new NoticeBo()
                 </tr>
                 <tr>
                   <th scope='row'>노출여부</th>
-                  <td>
+                  <td colSpan={2}>
                     <FormControl component="fieldset"   >
                       <Controller
-                     {...register("article.expose")} 
+                     {...register("article.expose")}
                         rules={{ required: true }}
                         control={control}
                         name="expose"
@@ -259,15 +370,15 @@ const notice = new NoticeBo()
                   </td>
                 </tr>
                 <tr>
-                  <th scope='row'>제목</th>
-                  <td>
+                  <th scope='row' >제목</th>
+                  <td colSpan={2}>
                     <div className='form-wrap'>
                       {/* <input {...register("firstName")} />  */}
                       <TextField sx={{ width: '720px' }} {...register("article.title")} />
                       {/* Checkbox  */}
                       <FormControl component="fieldset" >
                         <Controller
-                         {...register("article.isPinned")} 
+                         {...register("article.isPinned")}
                           rules={{ required: true }}
                           control={control}
                           name="isPinned"
@@ -276,7 +387,7 @@ const notice = new NoticeBo()
                             console.log(field)
                             return (
                               <FormControlLabel
-                             
+
                                 value='Y'
                                 label='상단고정'
                                 labelPlacement='end'
@@ -295,16 +406,70 @@ const notice = new NoticeBo()
                     <span style={{ display: isChecked ? 'none' : '' }}>내용</span>
                     <span style={{ display: isChecked ? '' : 'none' }}>내용(웹)</span>
                   </th>
-                  <td>
+                  <td colSpan={2}>
 
                     <EditorContainer>
                       <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
                     </EditorContainer>
+                    </td>
+                </tr>
+                <tr>
+                  <th scope='row' className='vat'>
+                  <span style={{ display: isChecked ? 'none' : '' }}>첨부파일</span>
+
+                    </th>
+                    <td>
+
+                    <input
+        type="file"
+        id="fileUpload"
+        style={{ display: "none" }} // label을 이용하여 구현하기에 없애줌
+        multiple={true} // 파일 다중선택 허용
+      />
+
+      <label
+        className={isDragging ? "fcc-DragDrop-File-Dragging" : "fcc-DragDrop-File"}
+        // 드래그 중일때와 아닐때의 클래스 이름을 다르게 주어 스타일 차이
+
+        htmlFor="fileUpload"
+        ref={dragRef}
+      >
+        <div>파일 첨부</div>
+      </label>
+      <div className="fcc-DragDrop-Files">
+{files.length > 0 &&
+  files.map((file: IFileTypes) => {
+    const {
+      id,
+      object: { name }
+    } = file;
+
+    return (
+      <div key={id}>
+        <div>{name}</div>
+        <div
+          className="DragDrop-Files-Filter"
+          onClick={() => handleFilterFile(id)}
+          // onClick 속성에 위처럼 함수를 추가시켜 줍니다.
+        >
+          X
+        </div>
+      </div>
+    );
+  })}
+</div>
+</td><td>
 
 
-                  </td>
+                    </td>
+
 
                 </tr>
+
+                    {/* <div className="fcc-DragDrop"> */}
+
+
+
 
 
               </TableBody>
@@ -319,9 +484,9 @@ const notice = new NoticeBo()
           <Button variant='outlined' size='medium' color='info' onClick={() => reset()}>
             취소
           </Button>
-    
+
           <SubmitButton title='전송' />
-      
+
 
         </div>
       </form>
@@ -340,7 +505,7 @@ const EditorContainer = styled.div`
 const Contents = {
   Container: styled.div`
         width: 1200px;
-        
+
         margin: 0 auto;
 
         display: flex;
