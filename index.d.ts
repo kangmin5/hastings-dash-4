@@ -1,0 +1,23 @@
+// Type definitions for draftjs-to-html 0.8
+// Project: https://github.com/jpuri/draftjs-to-html#readme
+// Definitions by: Ivan Zverev <https://github.com/1cheese>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 2.9
+
+//**TODO https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/draftjs-to-html/index.d.ts */
+
+import { RawDraftContentState } from 'draft-js';
+
+interface HashtagConfig {
+    trigger?: string | undefined;
+    separator?: string | undefined;
+}
+
+declare function draftToHtml(
+    editorContent: RawDraftContentState,
+    hashtagConfig?: HashtagConfig,
+    directional?: boolean,
+    customEntityTransform?: (...args: any[]) => any,
+): string;
+
+export = draftToHtml;

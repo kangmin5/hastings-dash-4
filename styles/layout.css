@@ -1,0 +1,150 @@
+/* ===== header ====== */
+.fcc .header {
+  background-color: #0d8a72;
+  color: rgba(255, 255, 255, 0.8);
+  /* min-height: 6rem; */
+}
+.fcc .header .gnb-button {
+  font-size: 1.125rem;
+  padding: 0.4rem 1.5rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  background-color: transparent;
+  border: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+.fcc .header .gnb-button:hover {
+  color: rgba(255, 255, 255, 1);
+}
+.fcc .header .gnb-button.active {
+  color: rgba(255, 255, 255, 1);
+  font-weight: 600;
+}
+.fcc .header .gnb-button:before {
+  display: block;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: #fff;
+  height: 2px;
+  transform: scaleX(0);
+  transition: transform 300ms ease-in-out;
+}
+/* .fcc .header .gnb-button:hover:before, */
+.fcc .header .gnb-button.active:before {
+  transform: scaleX(1);
+  width: 100%;
+}
+.fcc .header .nav-menu {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+/* .fcc .header .nav-menu + .nav-menu {
+  margin-left: 0.5rem;
+} */
+
+/* ===== content ====== */
+.fcc .layout-page-content {
+  padding-top: 2.5rem;
+}
+
+/* ===== lnb ====== */
+.fcc .MuiDrawer-root {
+  width: 16rem;
+  background-color: #fff;
+}
+.fcc .MuiDrawer-root .MuiPaper-root {
+  width: 16rem;
+  background-color: #fff;
+}
+.fcc .nav-header {
+  background-color: #0d8a72;
+  color: rgba(255, 255, 255, 0.8);
+  /* min-height: 6rem; */
+  justify-content: center;
+}
+.fcc .nav-header .MuiTypography-h1 {
+  color: #fff;
+}
+.fcc .nav-section-title {
+  min-height: 9rem;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #f3f5f7;
+}
+.fcc .nav-section-title > p {
+  font-size: 1.25rem;
+  color: #818894;
+  font-weight: 500;
+}
+.fcc .nav-section-title > p:before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 2.5rem;
+  background: url(../public/images/layout/icon-shop.svg) no-repeat 50% 0;
+}
+.fcc .nav-group {
+  border-bottom: 1px solid #f3f5f7;
+}
+.fcc .nav-group .Mui-selected .depth1 {
+  color: #00707b;
+  font-weight: 500;
+}
+.fcc .nav-group .MuiListItemButton-root .MuiTouchRipple-root {
+  display: none;
+}
+/* ===== login ====== */
+.fcc .login {
+  min-height: 100vh;
+  margin: 0 auto;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  background-color: #fff;
+}
+.fcc .login .login-wrap {
+  max-width: 400px;
+  width: 100%;
+  margin: -6.25rem auto 0;
+}
+.fcc .login .login-wrap .MuiTypography-h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.fcc .login .login-wrap .MuiFormControl-root + .MuiFormControl-root {
+  margin-left: 0;
+  margin-top: 1rem;
+}
+.fcc .login .login-wrap .MuiInputBase-root {
+  min-height: 3.5rem;
+}
+.fcc .login .save-id {
+  margin-top: 1rem;
+}
+.fcc .login .MuiButton-containedSizeLarge {
+  margin-top: 2rem;
+  min-height: 3.5rem;
+}
+
+.fcc .col-wrap {
+  display: flex;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 4px;
+}
+
+.fcc .col-wrap .col-left {
+  flex-basis: 440px;
+  padding-right: 40px;
+}
+.fcc .col-wrap .col-right {
+  flex-basis: calc(100% - 440px)
+}

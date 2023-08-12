@@ -1,0 +1,109 @@
+/* ===== modal-footer ====== */
+.fcc .dialog-footer {
+  min-height: 4rem;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+}
+.fcc .dialog-footer .MuiButton-sizeMedium {
+  min-height: 2.5rem;
+  font-weight: 500;
+}
+
+/* ===== modal-footer ====== */
+.fcc .MuiDialog-paper {
+  max-width: 400px;
+}
+.fcc .MuiDialog-paperWidthXs {
+  max-width: 500px;
+}
+.fcc .MuiDialog-paperWidthSm {
+  max-width: 640px;
+}
+.fcc .MuiDialog-paperWidthMd {
+  max-width: 704px;
+}
+.fcc .MuiDialog-paperWidthLg {
+  max-width: 900px;
+}
+.fcc .MuiDialog-paperWidthXlg {
+  max-width: 1020px;
+}
+.fcc .MuiDialog-paperWidthXXlg {
+  max-width: 1200px;
+}
+.fcc .MuiDialogActions-root {
+  min-height: 4rem;
+  justify-content: flex-end;
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.2rem;
+  border-top: 1px solid rgba(58, 53, 65, 0.08);
+}
+.fcc .MuiDialogActions-root .MuiButton-sizeMedium {
+  min-height: 2.5rem;
+  font-weight: 500;
+}
+.fcc .MuiDialogTitle-root {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+}
+.fcc .MuiDialogTitle-root strong {
+  display: flex;
+  align-items: center;
+  font-size: 1.375rem;
+  font-weight: 500;
+}
+.fcc .MuiDialogTitle-root button {
+  display: inline-block;
+  font-size: 0;
+  line-height: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  min-width: initial;
+  background: url(../public/images/icons/ico-close.svg) no-repeat;
+}
+.fcc .MuiDialogContent-root {
+  padding: 2rem;
+}
+.fcc .MuiDialogContentText-root {
+  font-size: 1.4rem;
+  letter-spacing: -0.5px;
+}
+.MuiDialog-root.register-quick-purchase .MuiDialog-paperWidthSm {
+  max-width: 640px;
+}
+.MuiDialog-root.register-quick-purchase .MuiDialogTitle-root .prd-size {
+  margin-top: 0;
+  margin-left: 0.8rem;
+}
+.MuiDialog-root.register-quick-purchase .prd-quantity {
+  border-top: 0;
+  margin-top: 0;
+  padding-top: 0;
+}
+.MuiDialog-root.register-quick-purchase .btn-group {
+  margin-top: 2.4rem;
+}
+
+.list-delivery p {
+  line-height: 1.5;
+}
+.list-delivery .name,
+.list-delivery .phone-number {
+  font-size: 1.6rem;
+}
+.list-delivery .MuiDialogContent-root {
+  min-height: 40rem;
+  flex-direction: column;
+  display: flex;
+  justify-content: space-between;
+}
+.list-delivery .MuiDialogContent-root .btn-wrap {
+  margin-top: 4rem;
+}
+
+.send-consent {padding: 2rem !important;}

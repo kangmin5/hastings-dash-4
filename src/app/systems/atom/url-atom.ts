@@ -1,0 +1,1 @@
+const domain = 'http://3.34.85.184/'

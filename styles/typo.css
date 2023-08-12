@@ -1,0 +1,201 @@
+.point {
+  color: #fd4e6d !important;
+}
+.gray1 {
+  color: #818b94 !important;
+}
+.fcc .essential {
+  color: #ee4b3c;
+  margin-left: 4px;
+}
+.bold {
+  font-weight: 700;
+}
+.txt1 {
+  font-size: 12px;
+}
+.fcc .no-underline {
+  text-decoration: none;
+}
+.fcc .ellipsis {
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 90%;
+}
+
+.fcc .MuiTypography-root {
+  line-height: 1.5;
+}
+.fcc .MuiTypography-h1 {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+.fcc .MuiTypography-h2 {
+  font-size: 1.375rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.fcc .MuiTypography-h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.fcc .MuiTypography-h4 {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+.fcc .MuiTypography-h5 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.fcc .MuiTypography-h6 {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+.fcc .MuiTypography-label {
+  font-weight: 500;
+}
+
+.fcc .h2 {
+  font-size: 1.375rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.fcc .h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+.fcc .h4 {
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+.fcc .h5 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.fcc .h6 {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* =============== type =============== */
+
+.fcc .h3-back-styled {
+  height: 40px;
+  flex-grow: 0;
+  background-color: #f6f7f9;
+  display: flex;
+  align-items: center;
+}
+.fcc .h3-back-styled h3 {
+  margin: auto 0;
+  font-weight: 500;
+  padding-left: 1.6rem;
+}
+.fcc .h3-back-styled h3 + span {
+  margin-left: 114px;
+}
+.fcc .h4-line-type {
+  border-top: 1px solid #d6dbe2;
+  padding-top: 2rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+.fcc .h4-line-type.type2 {
+  border-top: 0;
+  border-bottom: 1px solid #d6dbe2;
+  margin: 0 2.5rem 0;
+  padding: 0 0 1rem;
+}
+.fcc .h4-line-type + .tbl-view.type2 {
+  padding-top: 1rem;
+}
+.fcc .btn-type {
+  display: inline-block;
+  min-width: 42px;
+  min-height: 24px;
+  line-height: 24px;
+  text-align: center;
+  padding: 0 0.5rem;
+  color: #00707b;
+  background-color: #fff;
+  border: 1px solid #00707b;
+  text-decoration: none;
+  border-radius: 2px;
+}
+.fcc .form-guide {
+  color: #818b94;
+  font-size: 12px;
+}
+
+/* =============== align =============== */
+.tit-area {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.tit-area h4 {
+  margin-bottom: 0 !important;
+}
+.tbl-write + .tit-area {
+  margin-top: 2rem;
+}
+
+.list-type1 {
+  margin-top: 1.5rem;
+}
+.list-type1 li {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* =============== align =============== */
+.fcc .tit-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  border-bottom: 1px solid #222;
+  padding-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.fcc .tit-wrap.no-line {
+  border: 0;
+  padding-bottom: 0;
+}
+.fcc .tit-wrap .right {
+  margin-left: auto;
+}
+.fcc .tit-wrap ~ .tit-wrap {
+  margin-top: 2rem;
+}
+
+.fcc .tit-wrap p.desc {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  color: #818b94;
+  margin-top: 4px;
+  flex-basis: 100%;
+}
+.fcc .tit-wrap span.desc {
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  color: #818b94;
+  margin-top: 0;
+  margin-left: 0.5rem;
+  margin-bottom: 0.125rem;
+}
+.fcc .tit-wrap + .tbl-write {
+  margin-top: 1rem;
+}
+.fcc .form-wrap + .desc {
+  margin-top: 0.5rem;
+}
+.txt-wrap .desc {
+  margin-top: 0.5rem;
+}

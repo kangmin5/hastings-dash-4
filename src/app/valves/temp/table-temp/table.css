@@ -1,0 +1,54 @@
+.MyTable {
+    border: 1px solid;
+    width: 100%;
+    margin:  30px auto;
+   
+}
+ 
+.MyTable th, td {
+    border: 1px solid;
+    
+  }
+
+  .MyTable tr:nth-child(even){background-color: #f2f2f2; }
+
+  .MyTable tr:hover {background-color: #ddd;}
+
+  .MyTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: gray;
+  color: white;
+}
+
+.MyTable td {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+  }
+
+  .MyTableWrapper{
+    width: 100%;
+    margin: 0 auto;
+  }
+  .inlineBlock{
+    display: inline-block;
+  }
+
+  hr { border-top:1px solid #9C9C9C; border-bottom:1px solid #F6F6F6; }
+
+
+  .MyBorder div {
+    width: "100%"; border: "1px solid black";
+  }
+
+  .FastPagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px ;
+    cursor:"pointer";
+     display:"inline";
+      border:"0 1px black";
+  }

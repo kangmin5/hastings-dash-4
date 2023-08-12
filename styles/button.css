@@ -1,0 +1,168 @@
+/* ===== type ===== */
+.fcc .MuiButtonBase-root {
+  box-shadow: 0 0 0 !important;
+  white-space: nowrap;
+  text-transform: none;
+}
+/* .fcc button.default {
+  border-color: #d6dbe2;
+  color: #333;
+} */
+.fcc .MuiButton-outlinedInfo {
+  color: #333;
+  border-color: #d6dbe2;
+  background-color: #fff;
+}
+.fcc .MuiButton-textInfo {
+  color: #818b94;
+}
+.fcc .MuiButton-textInfo:hover {
+  background-color: #eef1f5;
+}
+
+/* ===== size ===== */
+.fcc .MuiButton-sizeSmall {
+  padding: 0.375rem 0.75rem;
+  min-height: 2rem;
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+.fcc .MuiButton-sizeMedium {
+  min-width: 6.25rem;
+  min-height: 2.5rem;
+  padding: 0.2rem 0.75rem;
+  line-height: 1.2;
+}
+.fcc button.x-small {
+  min-height: 1.75rem;
+  min-width: 3.125rem;
+  padding: 0 0.5rem;
+  font-size: 0.8125rem;
+  border-radius: 2px;
+}
+.fcc button.xx-small {
+  min-height: 24px !important;
+  padding: 0;
+  min-width: 3.125rem;
+}
+
+/* ===== IconButton ====== */
+.fcc .MuiIconButton-sizeSmall {
+  width: 24px;
+  height: 24px;
+}
+.ico-plus {
+  width: 12px !important;
+  height: 12px !important;
+  background: url(../public/images/icons/ico-plus.svg) no-repeat;
+  background-size: 100% auto;
+  border-radius: 0 !important;
+  margin-left: 4px !important;
+}
+.ico-sms {
+  background: url(../public/images/icons/ico-sms.svg) no-repeat;
+}
+.ico-address {
+  background: url(../public/images/icons/ico-address.svg) no-repeat;
+}
+.ico-memo {
+  background: url(../public/images/icons/ico-memo.svg) no-repeat;
+}
+.ico-mail {
+  background: url(../public/images/icons/ico-mail.svg) no-repeat;
+}
+
+/* ===== align ====== */
+.fcc .btn-group {
+  display: flex;
+  align-items: center;
+}
+.fcc .btn-group button + button {
+  margin-left: 0.5rem;
+}
+.fcc .btn-align {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 1rem;
+}
+.fcc .btn-align button + button {
+  margin-left: 0.5rem;
+  min-width: 100px;
+}
+.fcc .btn-align .left {
+  justify-content: flex-start;
+  margin-right: auto;
+}
+.fcc .search-box + .btn-align button {
+  min-width: 80px;
+}
+/* ===== text + icon ===== */
+button.icon {
+  position: relative;
+}
+button.icon i {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 2px;
+  margin-top: -1px;
+}
+button.icon .link {
+  background: url(../public/images/icons/ico-arrow-right.svg) no-repeat 50% 50%;
+}
+i.add {
+  background: url(../public/images/icons/ico-add2.svg);
+  width: 16px !important;
+  height: 16px !important;
+  margin-left: 0;
+  margin-right: 4px;
+}
+i.search {
+  background: url(../public/images/icons/ico-search.svg);
+  width: 24px !important;
+  height: 24px !important;
+  margin-left: 0;
+  margin-right: 4px;
+}
+i.delete {
+  background: url(../public/images/icons/ico-delete2.svg) no-repeat;
+  width: 12px !important;
+  height: 12px !important;
+  margin-left: 0 !important;
+  margin-right: 4px;
+}
+i.delete2 {
+  background: url(../public/images/icons/ico-delete-round.svg) no-repeat;
+  width: 24px !important;
+  height: 24px !important;
+  background-size: 100% auto;
+}
+/* ===== only icon ===== */
+button.MuiIconButton-root {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  padding: 0;
+}
+button.MuiIconButton-root.icon i {
+  margin: 0;
+}
+i.drag {
+  background: url(../public/images/icons/ico-square.svg) no-repeat 50% 50%;
+  width: 24px !important;
+  height: 24px !important;
+}
+/* ===== badge ===== */
+.badge {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+.badge.ico-b {
+  background: url(../public/images/icons/ico-b.svg) no-repeat;
+}
+.MuiButton-containedPrimary.icon i.link {
+  background-image: url(../public/images/icons/ico-link-w.svg);
+  background-size: 12px auto;
+}

@@ -1,0 +1,229 @@
+.fcc .dash {
+  margin: 0 0.5rem;
+}
+.fcc .essential {
+  color: #ee4b3c;
+  margin-left: 4px;
+}
+
+.fcc .MuiInputBase-root {
+  border-radius: 0.25rem;
+  min-height: 2rem;
+  /* width: 100%; */
+}
+.fcc .MuiInputBase-input {
+  padding: 0.3125rem 0.75rem 0.25rem;
+  min-height: 2rem;
+}
+.fcc .MuiFormControl-root {
+  margin-left: 0;
+}
+.fcc .MuiFormControl-root {
+  margin-left: 0;
+  max-width: 100%;
+}
+.fcc .MuiFormControl-root + .MuiFormControl-root {
+  margin-left: 0.5rem;
+}
+.fcc .MuiOutlinedInput-notchedOutline {
+  border-color: #d6dbe2;
+}
+.fcc .MuiInputBase-input-MuiOutlinedInput-input:hover {
+  border-color: #f00 !important;
+}
+.fcc .Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-width: 1px !important;
+}
+/* =============== textarea =============== */
+.fcc .MuiInputBase-inputMultiline {
+  padding: 0;
+}
+
+/* =============== size =============== */
+.fcc .w100 {
+  width: 100%;
+}
+
+.fcc .MuiTextField-root.x-small {
+  width: 5rem;
+}
+.fcc .MuiTextField-root.small {
+  width: 11.4375rem;
+}
+.fcc .MuiTextField-root.medium {
+  width: 23.75rem;
+}
+.fcc .MuiTextField-root.large,
+.fcc .MuiOutlinedInput-root.large,
+.fcc .MuiTextField-root.large .MuiInputBase-root {
+  min-height: 3.5rem;
+}
+/* =============== align =============== */
+.fcc .form-group {
+  display: flex;
+  align-items: center;
+}
+.fcc .form-group + .form-group {
+  margin-top: 0.5rem;
+}
+.fcc .form-group * + .MuiButtonBase-root {
+  margin-left: 0.5rem;
+}
+
+/* =============== date-picker =============== */
+.fcc .date-picker-wrap .MuiButton-outlined {
+  min-width: 3rem;
+  padding: 0.375rem 0.5rem;
+  border-color: #d6dbe2;
+  color: #333;
+}
+.fcc .date-picker-wrap .btn-group {
+  display: inline-flex;
+}
+
+/* .fcc .MuiFormGroup-root {
+  margin-top: 1rem;
+} */
+.fcc .MuiFormControlLabel-root + .MuiFormControlLabel-root {
+  margin-top: 0.5rem;
+}
+.fcc .MuiFormControlLabel-labelPlacementStart .MuiFormControlLabel-label {
+  margin-left: 0;
+}
+.fcc .MuiFormGroup-row .MuiFormControlLabel-root + .MuiFormControlLabel-root {
+  margin-top: 0;
+}
+
+/* .fcc .MuiTextField-root + .MuiButton-root {
+  margin-left: 0.5rem;
+} */
+
+/* =============== align =============== */
+.fcc .form-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.fcc .form-wrap .label {
+  white-space: nowrap;
+  margin-right: 1rem;
+}
+.fcc .form-wrap button {
+  margin-left: 0.5rem;
+}
+.fcc .form-wrap .unit {
+  margin-left: 0.5rem;
+}
+.fcc .form-wrap + .form-wrap {
+  margin-top: 0.5rem;
+}
+.fcc .form-wrap .MuiFormControlLabel-root {
+  margin-left: 0.5rem;
+}
+
+.text-box {
+  max-width: 900px;
+  background: #f7f7f7;
+  padding: 1rem;
+  line-height: 1.5;
+  font-size: 0.875rem;
+  border-radius: 4px;
+  word-break: keep-all;
+  word-wrap: break-word;
+}
+.text-box .date {
+  margin-bottom: 1rem;
+  display: block;
+}
+.sub-form-wrap {
+  margin-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+.fcc .file-box button {
+  display: inline-block;
+  width: 320px;
+  height: 60px;
+  border: solid 1px #d6dbe2;
+  text-align: left;
+  font-weight: 400;
+  background: url(../public/images/icons/ico-file.svg) no-repeat 8px 50%;
+  padding-left: 56px;
+}
+.fcc .file-box .picture {
+  background: url(../public/images/icons/ico-picture.svg) no-repeat 8px 50%;
+}
+.fcc .file-box .fail {
+  opacity: 0.5;
+}
+.file-box button + button {
+  margin-left: 0.5rem;
+}
+.file-box button strong {
+  display: block;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.file-box button .byte {
+  display: block;
+  color: #898d9c;
+  font-size: 12px;
+  margin-top: 2px;
+}
+.file-box button i.download,
+.file-box button i.delete {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 0.5rem;
+  width: 40px;
+  height: 40px;
+  background: url(../public/images/icons/ico-download.svg) no-repeat;
+}
+.file-box button i.delete {
+  background: url(../public/images/icons/ico-delete.svg) no-repeat;
+  width: 16px;
+  height: 16px;
+  right: 1rem;
+}
+.thumb + .file-box {
+  margin-top: 1rem;
+}
+
+.form-wrap.row .MuiTextField-root {
+  flex-direction: row;
+  align-items: center;
+}
+.MuiFormHelperText-root {
+  white-space: nowrap;
+  letter-spacing: 0 !important;
+}
+.size-wrap {
+  display: flex;
+  align-items: center;
+}
+.size-wrap li {
+  display: flex;
+  align-items: center;
+}
+.size-wrap li + li {
+  margin-left: 32px;
+}
+.size-wrap .label {
+  margin-right: 8px;
+  display: inline-block;
+}
+.size-wrap .unit {
+  margin-left: 8px;
+  display: inline;
+}
+.fcc .MuiFormControl-fullWidth {
+  max-width: 800px;
+}
+
+.log {
+  border: 1px solid #d6dbe2;
+  padding: 16px;
+  border-radius: 4px;
+  min-height: 240px;
+}

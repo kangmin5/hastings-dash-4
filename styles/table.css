@@ -1,0 +1,350 @@
+/* =============== search-box =============== */
+.fcc .search-box {
+  background: #fff;
+  border: 1px solid #d6dbe2;
+  border-radius: 4px;
+}
+.fcc .search-box th,
+.fcc .search-box td {
+  border-bottom: 1px solid #d6dbe2;
+  padding: 0.5rem 0;
+}
+.fcc .search-box td {
+  padding-right: 1.5rem;
+}
+.fcc .search-box tr:last-child th,
+.fcc .search-box tr:last-child td {
+  border-bottom: 0;
+}
+.fcc .search-box th {
+  text-align: left;
+  padding-left: 1rem;
+}
+.fcc .search-box td + th {
+  border-left: 1px solid #d6dbe2;
+}
+.fcc .search-box td .MuiFormControlLabel-root {
+  margin-right: 1rem;
+  margin-left: 0;
+}
+.fcc .search-box td .inline-type {
+  flex-direction: row;
+  align-items: center;
+  margin-right: 24px;
+}
+.fcc .search-box td .inline-type .label {
+  margin-right: 0.5rem;
+  margin-left: 1rem;
+}
+.fcc .search-box td .form-group label {
+  margin-right: 0.5rem;
+}
+
+/* =============== table =============== */
+
+.fcc th.vat {
+  vertical-align: top !important;
+}
+.fcc .tbl-list {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+}
+.fcc .tbl-list th {
+  background-color: #f6f7f8;
+  border-bottom: 1px solid #d6dbe2;
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: #7a7a7a;
+  height: 1.875rem;
+  padding: 0.2rem 0.75rem;
+}
+.fcc .tbl-list td {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  word-break: keep-all;
+  word-wrap: break-word;
+}
+.fcc .tbl-list tr:nth-child(2n) td {
+  background-color: #f9fafb;
+}
+.fcc .tbl-list-type .MuiDataGrid-columnHeader {
+  background-color: #f6f7f8;
+  border-bottom: 1px solid #d6dbe2;
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: #7a7a7a;
+  height: 1.875rem;
+  padding: 0.2rem 0.75rem;
+}
+
+.fcc .tbl-write {
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+}
+.fcc .tbl-write th,
+.fcc .tbl-write td {
+  border-bottom: 1px solid #eef1f5;
+  padding: 0.5rem 0;
+  vertical-align: middle;
+}
+.fcc .tbl-write td {
+  padding-right: 1.5rem;
+}
+.fcc .tbl-write tr:last-child th,
+.fcc .tbl-write tr:last-child td {
+  border-bottom: 0;
+}
+.fcc .tbl-write th {
+  text-align: left;
+  font-weight: 500;
+}
+.fcc .tbl-write th.vat {
+  vertical-align: top;
+  padding-top: 1rem;
+}
+.fcc .tbl-write td + th {
+  border-left: 1px solid #eef1f5;
+  padding-left: 1rem;
+}
+.fcc .tbl-write td .MuiFormControlLabel-root {
+  margin-right: 0;
+}
+.fcc .tbl-write td .MuiFormControlLabel-root + .MuiFormControlLabel-root {
+  margin-left: 1.5rem;
+}
+.fcc .tbl-write td .inline-type {
+  flex-direction: row;
+  align-items: center;
+  margin-right: 24px;
+}
+.fcc .tbl-write td .inline-type .label {
+  margin-right: 0.5rem;
+  margin-left: 1rem;
+}
+.fcc .tbl-write td .form-group label {
+  margin-right: 0.5rem;
+}
+.fcc .tbl-write + .btn-align button {
+  width: 100%;
+}
+.fcc .tbl-write + .btn-align button + button {
+  margin-left: 0.5rem;
+}
+.fcc .tbl-write.type2 {
+  padding: 0;
+}
+.fcc .tbl-write.type2 th,
+.fcc .tbl-write.type2 td {
+  border-bottom: 0;
+}
+.fcc .tbl-write.type2 th {
+  border-right: 1px solid #eef1f5;
+}
+.fcc .tbl-write.type2 td {
+  padding-left: 2rem;
+}
+.fcc .tbl-write.type3 {
+  padding: 2rem 2.5rem;
+}
+.fcc .tbl-write.type3 th,
+.fcc .tbl-write.type3 td {
+  border-bottom: 0;
+}
+.fcc .tbl-write.type3 th {
+  padding-left: 0;
+  padding-right: 1rem;
+}
+.fcc .tbl-write.type4 {
+  padding: 0;
+}
+.fcc .tbl-write.type4 th,
+.fcc .tbl-write.type4 td {
+  border: 1px solid #d6dbe2;
+  padding: 1rem 1.5rem;
+}
+.fcc .tbl-write.type4 tr:last-child th,
+.fcc .tbl-write.type4 tr:last-child td {
+  border-bottom: 1px solid #d6dbe2;
+}
+
+.fcc .tbl-view {
+  background: #fff;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+}
+.fcc .tbl-view + .tbl-view {
+  border-top: 1px solid #d6dbe2;
+  border-radius: 0;
+}
+
+.fcc .tbl-view th,
+.fcc .tbl-view td {
+  border-bottom: 1px solid #eef1f5;
+  padding: 0.5rem 0;
+  vertical-align: middle;
+}
+.fcc .tbl-view td {
+  padding-right: 0.5rem;
+}
+.fcc .tbl-view tr:last-child th,
+.fcc .tbl-view tr:last-child td {
+  border-bottom: 0;
+}
+.fcc .tbl-view th {
+  text-align: left;
+  font-weight: 500;
+}
+.fcc .tbl-view td + th {
+  border-left: 1px solid #eef1f5;
+  padding-left: 1rem;
+}
+.fcc .tbl-view td .MuiFormControlLabel-root {
+  margin-right: 0;
+}
+.fcc .tbl-view td .MuiFormControlLabel-root + .MuiFormControlLabel-root {
+  margin-left: 1.5rem;
+}
+.fcc .tbl-view td .inline-type {
+  flex-direction: row;
+  align-items: center;
+  margin-right: 24px;
+}
+.fcc .tbl-view td .inline-type .label {
+  margin-right: 0.5rem;
+  margin-left: 1rem;
+}
+.fcc .tbl-view td .form-group label {
+  margin-right: 0.5rem;
+}
+.fcc .tbl-view + .btn-align button {
+  width: 100%;
+}
+.fcc .tbl-view + .btn-align button + button {
+  margin-left: 0.5rem;
+}
+.fcc .tbl-view.type2 {
+  padding: 2rem 2.5rem;
+}
+.fcc .tbl-view.type2 th,
+.fcc .tbl-view.type2 td {
+  border-bottom: 0;
+  padding: 0.75rem 0;
+}
+/*========== muiDataGrid ===========*/
+.data-function,
+.data-chk-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.data-chk-box {
+  justify-content: flex-start;
+  border-top: 1px solid #eef1f5;
+  padding-top: 0.5rem;
+  margin-bottom: -0.5rem;
+  margin-top: 0.5rem;
+}
+.data-chk-box .total {
+  margin-right: 1rem;
+}
+.data-function .btn-group button.MuiButton-outlined,
+.data-chk-box .btn-group button.MuiButton-outlined {
+  border-color: #d6dbe2;
+  color: #333;
+  min-height: 1.75rem;
+  min-width: 3.125rem;
+  padding: 0 0.5rem;
+  font-size: 0.8125rem;
+  border-radius: 2px;
+}
+.data-function .btn-group button + button,
+.data-chk-box .btn-group button + button {
+  margin-left: 0.5rem;
+}
+
+.fcc .MuiTable-root {
+  table-layout: fixed;
+}
+.fcc .MuiInputBase-root + .MuiFormControl-root {
+  margin-left: 8px;
+}
+.fcc .MuiDataGrid-columnHeader .MuiDataGrid-columnSeparator {
+  display: none;
+}
+.fcc .MuiDataGrid-columnHeaderTitle {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+.fcc .MuiDataGrid-root {
+  margin-top: 1rem;
+}
+/* .fcc .MuiDataGrid-root {
+    padding-top: 2.5rem;
+  } */
+.fcc .MuiDataGrid-root .MuiDataGrid-columnHeader,
+.fcc .MuiDataGrid-root .MuiDataGrid-cell {
+  border: 0;
+  padding: 0 0.5rem !important;
+}
+.fcc .MuiDataGrid-root .MuiDataGrid-cell--textLeft {
+  padding-right: 0 !important;
+}
+.fcc .MuiDataGrid-root .MuiDataGrid-columnHeader--alignRight,
+.fcc .MuiDataGrid-root .MuiDataGrid-cell--textRight {
+  padding-left: 0 !important;
+}
+.fcc .MuiDataGrid-root .MuiDataGrid-cell--textRight .has-sort {
+  padding-right: 1.5rem !important;
+}
+.fcc .MuiDataGrid-root .MuiDataGrid-row:nth-child(2n) {
+  background-color: #f9fafb;
+}
+/* .fcc .MuiDataGrid-selectedRowCount {
+  position: absolute;
+  top: 8px;
+  padding-left: 0;
+}
+.fcc .MuiTablePagination-root {
+  margin-left: auto;
+} */
+.fcc .MuiDataGrid-root .MuiDataGrid-iconButtonContainer {
+  visibility: visible;
+  width: auto;
+}
+.fcc .MuiDataGrid-root .MuiDataGrid-sortIcon {
+  opacity: 1 !important;
+}
+/* .fcc .MuiDataGrid-root .MuiDataGrid-columnHeader--alignRight .MuiDataGrid-columnHeaderDraggableContainer, */
+.fcc .MuiDataGrid-root .MuiDataGrid-columnHeader--alignRight .MuiDataGrid-columnHeaderTitleContainer {
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+/* =============== tooltip ==============*/
+.fcc .MuiTooltip-popper {
+  margin-top: -0.5rem !important;
+}
+.fcc .MuiTooltip-popper .MuiTooltip-tooltip {
+  border-radius: 0.25rem !important;
+}
+.fcc .MuiDataGrid-cell > a {
+  font-size: 0.8125rem;
+}
+
+.fcc .board-cont {
+  padding-bottom: 1rem;
+}
+.fcc .MuiFormControlLabel-root + .board-cont {
+  margin-top: 0.5rem;
+}
+.fcc .r-line {
+  border-right: 1px solid #d6dbe2;
+}
+.tbl-list tfoot td {
+  background-color: #f2f2f2;
+}
