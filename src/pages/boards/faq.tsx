@@ -31,7 +31,7 @@ interface CellType {
   row: FaqVo
 }
 const FaqPage: NextPage = ({ post }: Parameters) => {
-  
+
   const router = useRouter()
   const dispatch = useAppDispatch()
   const AllFaqs = useSelector(selectAllFaqs)
@@ -60,9 +60,12 @@ const FaqPage: NextPage = ({ post }: Parameters) => {
         sortable: false,
         renderCell({ row }: CellType) {
           return (
-            <Link href=''>
-              <Typography variant='body2'>{row.article.title}</Typography>
-            </Link>
+              <Typography variant='body2'>
+
+              <Link href={'/boards/faq/'+row.bar.id}>
+              {row.article.title}</Link>
+
+                </Typography>
           )
         }
       },
@@ -128,7 +131,7 @@ const FaqPage: NextPage = ({ post }: Parameters) => {
       }
     ]
 
-  
+
 
   React.useEffect(() => {
     dispatch(getAllFaqs(undefined))

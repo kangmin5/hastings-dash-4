@@ -68,9 +68,10 @@ const CounselPage: NextPage = ({ post }: Parameters) => {
         headerAlign: 'center',
         renderCell({ row }: CellType) {
           return (
-            <Link href=''>
-              <Typography variant='body2'>{row.article.kind}</Typography>
-            </Link>
+
+            <Typography variant='body2'>
+                {row.article.kind}
+            </Typography>
           )
         }
       },
@@ -81,7 +82,12 @@ const CounselPage: NextPage = ({ post }: Parameters) => {
         headerName: '문의내용',
         sortable: false,
         renderCell({ row }: CellType) {
-          return <Typography variant='body2'>{row.article.content}</Typography>
+          return (
+            <Typography variant='body2'>
+              <Link href={'/boards/counsel/' + row.bar.id}>
+                {row.article.content}
+              </Link>
+            </Typography>)
         }
       },
       {
@@ -150,7 +156,7 @@ const CounselPage: NextPage = ({ post }: Parameters) => {
           return <Typography variant='body2'>{row.consult.evaluation}</Typography>
         }
       }
-  
+
       // {
       //   flex: 0.1,
       //   minWidth: 90,
@@ -165,7 +171,7 @@ const CounselPage: NextPage = ({ post }: Parameters) => {
       // }
     ]
   }
-  
+
 
   React.useEffect(() => {
     dispatch(getAllCounsels(undefined))
@@ -176,7 +182,7 @@ const CounselPage: NextPage = ({ post }: Parameters) => {
     <>
       <Typography variant='h2'>고객 상담내역 관리</Typography>
       <Card>
-      <form onSubmit={e => e.preventDefault()}>
+        <form onSubmit={e => e.preventDefault()}>
           <div className='search-box'>
             <table>
               <caption>고객 상담내역 조회</caption>

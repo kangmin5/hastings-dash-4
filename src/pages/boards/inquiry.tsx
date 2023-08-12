@@ -91,7 +91,11 @@ const InquiryPage: NextPage = ({ post }: Parameters) => {
         field: 'title',
         headerName: '제 목',
         renderCell: function ({ row }: { row: any }) {
-          return <Typography variant='body2'>{row.article.title}</Typography>
+          return (
+          <Typography variant='body2'>
+            <Link href={'/boards/inquiry/'+row.bar.id}>
+            {row.article.title}</Link>
+            </Typography>)
         }
       }
       ,

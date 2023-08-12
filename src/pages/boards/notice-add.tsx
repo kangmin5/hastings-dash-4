@@ -22,7 +22,7 @@ import styled from 'styled-components';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import EditorControlled from 'views/forms/form-elements/editor/EditorControlled'
-import { convertToRaw, EditorState } from "draft-js";
+import { Icon } from '@iconify/react'
 // import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import ReactQuill from 'react-quill';  // ssr 설정을 위해 주석처리
@@ -61,14 +61,14 @@ const NoticeAddPage: NextPage = () => {
   const dispatch = useAppDispatch()
   const [isChecked, setIsChecked] = React.useState(false)
 
-    // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
-    const [isDragging, setIsDragging] = React.useState<boolean>(false);
+  // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
+  const [isDragging, setIsDragging] = React.useState<boolean>(false);
 
-    // 각 선택했던 파일들의 고유값 id
-    const fileId = React.useRef<number>(0);
+  // 각 선택했던 파일들의 고유값 id
+  const fileId = React.useRef<number>(0);
 
-    // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
-    const dragRef = React.useRef<HTMLLabelElement | null>(null);
+  // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
+  const dragRef = React.useRef<HTMLLabelElement | null>(null);
 
 
   const Zoo: any = z.object({
@@ -107,75 +107,78 @@ const NoticeAddPage: NextPage = () => {
 
     console.log('2--------\n', htmlStr)
 
-   // let htmlString = "<p>Hello</p><a href='http://w3c.org'>W3C</a>"
-// let x1 = htmlStr.replace(/<[^>]+>/g, '');
-// console.log('3--------\n', x1)
+    // let htmlString = "<p>Hello</p><a href='http://w3c.org'>W3C</a>"
+    // let x1 = htmlStr.replace(/<[^>]+>/g, '');
+    // console.log('3--------\n', x1)
+    const cook = (htmlString: string) => {
+      const parser = new DOMParser();
+      const html = parser.parseFromString(htmlString, 'text/html');
 
-const body = cook(htmlStr)
-console.log('4--------\n', body)
+      return html.body;
+    }
+    const body = cook(htmlStr)
+    console.log('4--------\n', body)
 
-const arr: string[] = []
+    const arr: string[] = []
 
-for(let i=0; i< body.children.length; i++){
-  if(body.children[i].children[0]!= undefined){
-    arr.push(body.children[i].children[0].getAttribute('src'))
-  }
-}
+    for (let i = 0; i < body.children.length; i++) {
+      if (body.children[i].children[0] != undefined) {
+        arr.push(body.children[i].children[0].getAttribute('src'))
+      }
+    }
 
-const isPinned = data.isPinned
+    const isPinned = data.isPinned
 
-console.log('isPinned : ', isPinned)
+    console.log('isPinned : ', isPinned)
 
-const expose = data.expose
+    const expose = data.expose
 
-console.log('expose : ', expose)
+    console.log('expose : ', expose)
 
-const isPosted = data.isPosted
+    const isPosted = data.isPosted
 
-console.log('isPosted : ', isPosted)
+    console.log('isPosted : ', isPosted)
 
-const title = data.article.title
+    const title = data.article.title
 
-console.log('title : ', title)
-
-
-
-const art = new ArticleBuilder()
-.isPinned(isPinned)
-.expose(expose)
-.title(title)
-.isPosted(isPosted)
-.content(htmlStr)
-.build()
-
-const time = new TimeBuilder()
-.createdAt(DateMap().get())
-.build()
-
-const notice = new NoticeBo()
-.article(art)
-.build()
+    console.log('title : ', title)
 
 
 
+    const art = new ArticleBuilder()
+      .isPinned(isPinned)
+      .expose(expose)
+      .title(title)
+      .isPosted(isPosted)
+      .content(htmlStr)
+      .build()
 
-// const child1 = body.children[0].textContent
-// console.log('5--------\n', child1)
 
-// const child2 = body.children[1]
-// console.log('6--------\n', child2)
 
-// const tttt = body.children[1].textContent
-// console.log('tttt--------\n', tttt)
+    const notice = new NoticeBo()
+      .article(art)
+      .build()
 
-// const a = child2.children[0]
 
-// console.log('7--------\n', a)
 
-// const child3 = a.getAttribute('src')
-// console.log('8--------\n', child3)
 
-// const b = body.children[1].textContent
+    // const child1 = body.children[0].textContent
+    // console.log('5--------\n', child1)
+
+    // const child2 = body.children[1]
+    // console.log('6--------\n', child2)
+
+    // const tttt = body.children[1].textContent
+    // console.log('tttt--------\n', tttt)
+
+    // const a = child2.children[0]
+
+    // console.log('7--------\n', a)
+
+    // const child3 = a.getAttribute('src')
+    // console.log('8--------\n', child3)
+
+    // const b = body.children[1].textContent
 
     dispatch(addNotice(notice))
 
@@ -190,7 +193,7 @@ const notice = new NoticeBo()
     if (roof.current) {
 
 
-     //  console.log(' ::::: 이미지 등록 ::::: \n', htmlStr)
+      //  console.log(' ::::: 이미지 등록 ::::: \n', htmlStr)
 
       //roof.current.innerHTML = '<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>'
       //roof.current.innerHTML += htmlStr;
@@ -294,21 +297,16 @@ const notice = new NoticeBo()
   }, [initDragEvents, resetDragEvents]);
 
 
-  const cook = (htmlString: string) => {
-    const parser = new DOMParser();
-    const html = parser.parseFromString(htmlString, 'text/html');
 
-    return html.body;
-}
 
 
   return (
     <>
 
+      <Card className='register-box'>
+        <Typography variant='h2'>공지사항 관리</Typography>
+        <form onSubmit={handleSubmit(onSubmit)}>
 
-      <Typography variant='h2'>공지사항 관리</Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Card className='register-box'>
 
           <Box className='h3-back-styled'>
             <h3>공지사항 등록</h3>
@@ -324,10 +322,10 @@ const notice = new NoticeBo()
               <TableBody>
                 <tr>
                   <th scope='row'>게시여부</th>
-                  <td colSpan={2}>
+                  <td >
                     <FormControl component="fieldset"  >
                       <Controller
-                      {...register("article.isPosted")}
+                        {...register("article.isPosted")}
                         rules={{ required: true }}
                         control={control}
                         name="isPosted"
@@ -347,10 +345,10 @@ const notice = new NoticeBo()
                 </tr>
                 <tr>
                   <th scope='row'>노출여부</th>
-                  <td colSpan={2}>
+                  <td >
                     <FormControl component="fieldset"   >
                       <Controller
-                     {...register("article.expose")}
+                        {...register("article.expose")}
                         rules={{ required: true }}
                         control={control}
                         name="expose"
@@ -358,7 +356,7 @@ const notice = new NoticeBo()
                         render={({ field }) => {
                           console.log(field)
                           return (
-                            <RadioGroup row aria-label='position'  name='horizontal' {...field}>
+                            <RadioGroup row aria-label='position' name='horizontal' {...field}>
                               <FormControlLabel value='all' label='전체' labelPlacement='end' control={<Radio />} />
                               <FormControlLabel value='web' control={<Radio />} label='웹' />
                               <FormControlLabel value='mobile' control={<Radio />} label='모바일' />
@@ -371,14 +369,14 @@ const notice = new NoticeBo()
                 </tr>
                 <tr>
                   <th scope='row' >제목</th>
-                  <td colSpan={2}>
+                  <td >
                     <div className='form-wrap'>
                       {/* <input {...register("firstName")} />  */}
                       <TextField sx={{ width: '720px' }} {...register("article.title")} />
                       {/* Checkbox  */}
                       <FormControl component="fieldset" >
                         <Controller
-                         {...register("article.isPinned")}
+                          {...register("article.isPinned")}
                           rules={{ required: true }}
                           control={control}
                           name="isPinned"
@@ -406,90 +404,95 @@ const notice = new NoticeBo()
                     <span style={{ display: isChecked ? 'none' : '' }}>내용</span>
                     <span style={{ display: isChecked ? '' : 'none' }}>내용(웹)</span>
                   </th>
-                  <td colSpan={2}>
-
+                  <td >
+                  <div className='editor-inline-box'>
                     <EditorContainer>
                       <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
                     </EditorContainer>
-                    </td>
+                    </div>
+                  </td>
                 </tr>
                 <tr>
                   <th scope='row' className='vat'>
-                  <span style={{ display: isChecked ? 'none' : '' }}>첨부파일</span>
+                    <span style={{ display: isChecked ? 'none' : '' }}>첨부파일</span>
 
-                    </th>
-                    <td>
-
+                  </th>
+                  <td>
+                  <div style={{ color: 'rgba(58, 53, 65, 0.24)', marginBottom: '16.9px' }}>
                     <input
-        type="file"
-        id="fileUpload"
-        style={{ display: "none" }} // label을 이용하여 구현하기에 없애줌
-        multiple={true} // 파일 다중선택 허용
-      />
+                      type="file"
+                      id="fileUpload"
+                      style={{ display: "none" }} // label을 이용하여 구현하기에 없애줌
+                      multiple={true} // 파일 다중선택 허용
+                    />
 
-      <label
-        className={isDragging ? "fcc-DragDrop-File-Dragging" : "fcc-DragDrop-File"}
-        // 드래그 중일때와 아닐때의 클래스 이름을 다르게 주어 스타일 차이
+                    <label
+                      className={isDragging ? "fcc-DragDrop-File-Dragging" : "fcc-DragDrop-File"}
+                      // 드래그 중일때와 아닐때의 클래스 이름을 다르게 주어 스타일 차이
 
-        htmlFor="fileUpload"
-        ref={dragRef}
-      >
-        <div>파일 첨부</div>
-      </label>
-      <div className="fcc-DragDrop-Files">
-{files.length > 0 &&
-  files.map((file: IFileTypes) => {
-    const {
-      id,
-      object: { name }
-    } = file;
+                      htmlFor="fileUpload"
+                      ref={dragRef}
+                    >
 
-    return (
-      <div key={id}>
-        <div>{name}</div>
-        <div
-          className="DragDrop-Files-Filter"
-          onClick={() => handleFilterFile(id)}
-          // onClick 속성에 위처럼 함수를 추가시켜 줍니다.
-        >
-          X
+
+          <Icon fontSize={50} icon='octicon:file-directory-open-fill-16' />
+
+        <div className='Image-label'>
+          <Typography>- 10MB 이하의 이미지만 업로드 가능합니다.</Typography>
+          <Typography>- 파일형식 : gif,jpg,png,pdf,excel,docx</Typography>
+          <Typography>- 업로드할 파일을 한꺼번에 드래그해서 해당 영역에 올려주세요.</Typography>
         </div>
-      </div>
-    );
-  })}
-</div>
-</td><td>
+      </label></div>
+                    <div className="fcc-DragDrop-Files">
+                      {files.length > 0 &&
+                        files.map((file: IFileTypes) => {
+                          const {
+                            id,
+                            object: { name }
+                          } = file;
 
-
-                    </td>
-
-
+                          return (
+                            <div key={id}>
+                              <div>{name}</div>
+                              <div
+                                className="DragDrop-Files-Filter"
+                                onClick={() => handleFilterFile(id)}
+                              // onClick 속성에 위처럼 함수를 추가시켜 줍니다.
+                              >
+                                X
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  </td>
                 </tr>
+                <tr>
+                  <th scope='row'></th>
+                  <td>
 
-                    {/* <div className="fcc-DragDrop"> */}
+                    <div className='btn-align' style={{ float: 'left' }}>
 
-
-
-
-
+                      <Button variant='outlined' size='large' color='info'
+                        style={{ width: '350px' }}
+                        onClick={() => reset()}>
+                        취소
+                      </Button>
+                      <Button variant='contained' size='large' color='success'
+                        style={{ width: '350px' }}
+                        onClick={() => alert()}>
+                        등록
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
               </TableBody>
             </Table>
-
           </div>
 
 
-        </Card>
-
-        <div className='btn-align'>
-          <Button variant='outlined' size='medium' color='info' onClick={() => reset()}>
-            취소
-          </Button>
-
-          <SubmitButton title='전송' />
-
-
-        </div>
-      </form>
+        </form>
+      </Card>
     </>
   )
 }

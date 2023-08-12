@@ -67,9 +67,10 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
         minWidth: 80,
         headerName: 'ID/주문번호',
         renderCell({ row }: CellType) {
-          return <Typography variant='body2'>
+          return (<Typography variant='body2'>
             <Link href={'/orders/order/'+row.oar.id}>
-            {row.oar.id}</Link></Typography>
+            {row.oar.id}</Link>
+            </Typography>)
         }
       },
       {
@@ -322,7 +323,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
     </Table>
   </div>
 </form>
-          
+
       <h2 className='h2'>전체 주문 목록</h2>
       {/* <DatePickerWrapper> */}
       <Card>

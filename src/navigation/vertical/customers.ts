@@ -30,6 +30,10 @@ export default function navigation(): VerticalNavItemsType {
           path: '/customers/cart'
         },
         {
+          title: '찜한상품 조회',
+          path: '/customers/wish'
+        },
+        {
           title: '구독 관리',
           path: '/customers/subscribe'
         }
@@ -59,7 +63,7 @@ export default function navigation(): VerticalNavItemsType {
     },
     {
       id: '2',
-      title: '결제 계좍 관리',
+      title: '결제 계좌 관리',
       children: [
         {
           title: '은행계좌 관리',

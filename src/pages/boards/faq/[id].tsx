@@ -19,23 +19,25 @@ import { FaqByIdSelector } from 'app/boards/org/faq-org/faq-selector'
 import { useAppDispatch } from 'custom-hooks'
 import { saveFaq } from 'app/boards/org/faq-org/faq-reducer'
 import { useSelector } from 'react-redux'
-
+import { addFaq, getFaqById } from 'app/boards/org/faq-org/faq-thunk';
 import { FaqBo } from 'app/boards/mo/faq-mo/faq-vo'
 import { ArticleBuilder } from 'app/boards/atom/article-atom'
 import { BarBuilder } from 'app/boards/atom/bar-atom'
 
 // ** 021. 자주묻는 질문 상세
 
-export function FaqDetail() {
+export function FaqIdPage() {
   const router = useRouter()
+
   const dispatch = useAppDispatch()
   const faqById = useSelector(FaqByIdSelector)
 
   React.useEffect(() => {
     const { id } = router.query
     if (typeof id === 'string') {
-      const a1 = new BarBuilder().id(id).build()
-      dispatch(saveFaq(new FaqBo().bar(a1).build()))
+      console.log(' URL 로 넘어온 ID 는 ', id, ' 입니다')
+      const a = new FaqBo().bar(new BarBuilder().id(id).build()).build()
+      dispatch(getFaqById(a))
     }
   }, [dispatch, router.query])
 

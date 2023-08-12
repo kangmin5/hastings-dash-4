@@ -2,8 +2,6 @@ import * as React from 'react'
 import type { GetStaticProps, NextPage } from "next"
 import { useAppDispatch} from 'custom-hooks'
 import { DataGrid, GridRowId, GridColDef } from '@mui/x-data-grid'
-import { CustomerSearch } from 'app/customers/temp/customer-temp/customer-search'
-import { ModalPage } from './customer-modal'
 import { useRouter } from 'next/router'
 import { selectAllNotes, selectItemCount } from 'app/customers/org/note-org/note-selector'
 import { getAllCustomers } from 'app/customers/org/customer-org/customer-thunk'
@@ -83,7 +81,7 @@ const NotePage: NextPage = ({post}: Parameters) => {
           return <Typography>{id}</Typography>
         }
       },
-     
+
     ]
   }
 

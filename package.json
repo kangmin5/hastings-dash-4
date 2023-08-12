@@ -125,7 +125,9 @@
     "draftjs-to-html": "0.9.1",
     "html-to-draftjs": "1.4.0",
     "quill-image-resize-module": "3.0.0",
-    "quill-image-resize":"3.0.9"
+    "quill-image-resize":"3.0.9",
+    "currency.js": "^2.0.4",
+    "notistack": "^3.0.1"
 	},
 	"devDependencies": {
 		"@iconify/iconify": "3.1.0",

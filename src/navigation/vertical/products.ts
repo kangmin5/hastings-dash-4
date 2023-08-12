@@ -58,6 +58,18 @@ export default function navigation(): VerticalNavItemsType {
           path: '/products/product-excel'
         }
       ]
+    },
+    {
+      id: '4',
+      title: '상품 리뷰',
+      children: [
+        {
+          id: '1',
+          title: '리뷰 보기',
+          path: '/products/review'
+        }
+
+      ]
     }
   ]
 }
