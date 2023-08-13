@@ -13,10 +13,10 @@ export default function navigation(): VerticalNavItemsType {
           title: '홈페이지 메인',
           path: '/systems/home'
         },
-        {
-          title: '쇼핑몰 메인 관리',
-          path: '/systems/shop'
-        }
+        // {
+        //   title: '쇼핑몰 메인 관리',
+        //   path: '/systems/shop'
+        // }
       ]
     }
   ]

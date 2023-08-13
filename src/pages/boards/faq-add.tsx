@@ -2,15 +2,8 @@
 import React from 'react'
 import type { GetStaticProps, NextPage } from "next"
 import styled from 'styled-components';
-import {
-  useForm, SubmitHandler, Controller,
-  FieldValues, ResolverResult, ResolverOptions
-} from "react-hook-form"
-import { z } from 'zod'
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from 'custom-hooks'
 import { Icon } from '@iconify/react'
-// ** MUI Imports
 import {
   Box,
   Button,
@@ -26,7 +19,8 @@ import {
   Table,
   TableBody,
   TextField,
-  Typography
+  Typography,
+  FormHelperText,
 } from '@mui/material'
 import EditorControlled from 'views/forms/form-elements/editor/EditorControlled'
 import dynamic from 'next/dynamic';
@@ -34,30 +28,46 @@ import { FaqBo } from 'app/boards/mo/faq-mo/faq-vo';
 import { ArticleBuilder } from 'app/boards/atom/article-atom';
 import { addFaq } from 'app/boards/org/faq-org/faq-thunk';
 const Editor = dynamic(() => import('./notice-editor'), { ssr: false });
-// import { DragDrop } from 'views'
-
-// ** Images
-// import dele from '/public/images/icons/ico-delete.svg'
-// import square from '/public/images/icons/ico-square.svg'
-// import { ReactComponent as Add } from '/public/images/icons/Add.svg'
-// 해당 인터페이스는 컴포넌트 밖에 작성해주세요!
+import { useForm, SubmitHandler, Controller,} from "react-hook-form"
+import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormControl from '@mui/material/FormControl';
 interface IFileTypes {
   id: number; // 파일들의 고유값 id
   object: File;
 }
 // ** customer-service / faq-operator / register-faq 자주묻는 질문 등록
-export default function FaqAddPage() {
-  // ** next ReferenceError: window is not defined 해결 방법
+const FaqAddPage = () => {
+  const dispatch = useAppDispatch()
 
-  const [isChecked, setIsChecked] = React.useState(false)
+  const Zoo: any = z.object({
+    title: z.string().nonempty('제목은 필수값입니다'),
+    isPosted: z.string(),
+    expose: z.string(),
+    isPinned: z.string()
+  });
+
+  type Zookeeper = z.infer<typeof Zoo> & { unusedProperty: string };
+
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm();
-  const dispatch = useAppDispatch()
+  } = useForm<Zookeeper>({
+    mode: "onSubmit",
+    defaultValues: {
+      title: "",
+      isPosted: "Y",
+      expose: "all",
+      isPinned: "N"
+
+    },
+    resolver: zodResolver(Zoo), // Useful to check TypeScript regressions
+  });
+
+
 
     const onSubmit: SubmitHandler<any> = (data) => {
       console.log('공지사항 전송 테스트')
@@ -289,18 +299,27 @@ export default function FaqAddPage() {
                   <th scope='row'>문의여부</th>
                   <td>
                     <div className='form-wrap'>
+<Controller
+rules={{ required: true }}
+control={control}
+name="kind"
+defaultValue={'etc'}
+render={(
+  {field}
+) => (
                       <Select sx={{ width: '11.25rem' }} defaultValue='0'>
-                        <MenuItem value='0'>선택</MenuItem>
-                        <MenuItem value='1'>사이트이용</MenuItem>
-                        <MenuItem value='2'>시스템오류</MenuItem>
-                        <MenuItem value='4'>회원</MenuItem>
-                        <MenuItem value='5'>상품</MenuItem>
-                        <MenuItem value='6'>배송</MenuItem>
-                        <MenuItem value='7'>취소/교환/환불</MenuItem>
-                        <MenuItem value='8'>대량구매</MenuItem>
-                        <MenuItem value='9'>이벤트/쿠폰/적립금</MenuItem>
-                        <MenuItem value='10'>기타</MenuItem>
+                        <MenuItem value='etc'>선택</MenuItem>
+                        <MenuItem value='site'>사이트이용</MenuItem>
+                        <MenuItem value='error'>시스템오류</MenuItem>
+                        <MenuItem value='member'>회원</MenuItem>
+                        <MenuItem value='goods'>상품</MenuItem>
+                        <MenuItem value='shop'>배송</MenuItem>
+                        <MenuItem value='cancel'>취소/교환/환불</MenuItem>
+                        <MenuItem value='buy'>대량구매</MenuItem>
+                        <MenuItem value='event'>이벤트/쿠폰/적립금</MenuItem>
+                        <MenuItem value='etc'>기타</MenuItem>
                       </Select>
+)} />
                       <Button variant='outlined' size='small' color='info' className='icon'>
                         {/* <Add /> */}
                         <i className='add' />
@@ -312,29 +331,88 @@ export default function FaqAddPage() {
                 <tr>
                   <th scope='row'>게시여부</th>
                   <td>
+                  <Controller
+rules={{ required: true }}
+control={control}
+name="isPosted"
+defaultValue={'Y'}
+render={(
+  {field}
+) => (
                     <RadioGroup row aria-label='position' name='horizontal' defaultValue='start'>
-                      <FormControlLabel value='posting' label='게시' labelPlacement='end' control={<Radio />} />
-                      <FormControlLabel value='unpublished' control={<Radio />} label='미게시' />
+                      <FormControlLabel value='Y' label='게시' labelPlacement='end' control={<Radio />} />
+                      <FormControlLabel value='N' control={<Radio />} label='미게시' />
                     </RadioGroup>
+                    )} />
                   </td>
                 </tr>
                 <tr>
                   <th scope='row'>질문 </th>
                   <td>
                     <div className='form-wrap'>
-                      <TextField sx={{ width: '45rem' }} {...register("First name", {required: true, maxLength: 80})} />
-                      <FormControlLabel
-                        value='fixed'
-                        label='게시글 등록순서 고정'
-                        labelPlacement='end'
-                        control={<Checkbox />}
+  <Controller
+      rules={{ required: true }}
+      control={control}
+      name="title"
+      defaultValue={''}
+      render={(
+        {
+          field: { value, onChange, onBlur, ref },
+          fieldState: { error },
+        }
+      ) => (
+                          <FormControl component="fieldset" >
+                            <TextField
+                              variant='outlined'
+                              name="title"
+                              placeholder="자주 묻는 질문을 입력하세요"
+                              inputRef={ref}
+                              value={value}
+                              onChange={onChange}
+                              onBlur={onBlur}
+                              error={Boolean(error)}
+                              sx={{ width: '720px' }} />
+                            <FormHelperText
+                              sx={{
+                                color: 'error.main',
+                              }}
+                            >
+                              {error?.message ?? ''}
+                            </FormHelperText>
+                          </FormControl>
+                        )}
                       />
+
+<Controller
+
+rules={{ required: true }}
+control={control}
+name="isPinned"
+defaultValue={'N'}
+render={(
+  {
+    field: { onChange, ...props },
+    fieldState: { error },
+  }
+) => (
+                              <FormControl component="fieldset" >
+                                <FormControlLabel
+                                onChange={onChange}
+                                  value='Y'
+                                  label='상단고정'
+                                  labelPlacement='end'
+                                  control={<Checkbox />}
+                                  className='label'
+                                />
+                                  </FormControl>
+  )}
+/>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <th scope='row' className='vat'>
-                    <span style={{ display: isChecked ? 'none' : '' }}>답변</span>
+                    <span >답변</span>
                   </th>
                   <td>
                     <div className='editor-inline-box'>
@@ -346,7 +424,7 @@ export default function FaqAddPage() {
                 </tr>
                 <tr>
                   <th scope='row' className='vat'>
-                  <span style={{ display: isChecked ? 'none' : '' }}>첨부파일</span>
+                  <span >첨부파일</span>
 
 </th>
 <td> <div style={{ color: 'rgba(58, 53, 65, 0.24)', marginBottom: '16.9px' }}>
@@ -429,6 +507,10 @@ export default function FaqAddPage() {
     </>
   )
 }
+
+export default FaqAddPage;
+
+
 const EditorContainer = styled.div`
     width: 100%;
     height: 400px;
@@ -476,5 +558,7 @@ const Contents = {
         }
     `,
 }
+
+
 //** 드래그-앤-드롭 dnd */
 //** https://velog.io/@yiyb0603/React%EC%97%90%EC%84%9C-%EB%93%9C%EB%9E%98%EA%B7%B8-%EC%95%A4-%EB%93%9C%EB%A1%AD%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%ED%8C%8C%EC%9D%BC-%EC%97%85%EB%A1%9C%EB%93%9C-%ED%95%98%EA%B8%B0 */

@@ -283,7 +283,7 @@ const NoticeAddPage: NextPage = () => {
                 <tr>
                   <th scope='row'>게시여부</th>
                   <td >
-                    <FormControl component="fieldset"  >
+
                       {/* <FormLabel id="demo-radio-buttons-group-label">게시여부</FormLabel> */}
                       <Controller
 
@@ -294,6 +294,7 @@ const NoticeAddPage: NextPage = () => {
                         render={(
                           {field}
                         ) => (
+
                             <RadioGroup row aria-label='position' name='isPosted'
                             {...field}
                             >
@@ -303,7 +304,7 @@ const NoticeAddPage: NextPage = () => {
                           )
                         }
                       />
-                    </FormControl>
+
                   </td>
                 </tr>
                 <tr>
@@ -322,7 +323,7 @@ const NoticeAddPage: NextPage = () => {
                             fieldState: { error },
                           }
                         ) => (
-                            <FormControl component="fieldset"   >
+
                             <RadioGroup row aria-label='position' name='expose'
                               value={value}
                               onChange={onChange}>
@@ -330,7 +331,7 @@ const NoticeAddPage: NextPage = () => {
                               <FormControlLabel value='web' control={<Radio />} label='웹' />
                               <FormControlLabel value='mobile' control={<Radio />} label='모바일' />
                             </RadioGroup>
-                            </FormControl>
+
                           )}
                       />
 

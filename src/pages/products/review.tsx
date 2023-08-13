@@ -12,14 +12,21 @@ type ShopListProps = { shopList: Shop[] };
 // =============================================
 
 const ShopList: NextPage<ShopListProps> = ({ shopList }) => {
+
+  const arr = [
+    {id : '', name: '', slug: '', phone: '', address: '',
+    rating: 5, coverPicture: '', profilePicture: ''}
+  ]
+
+
   return (
     <ShopLayout1>
       <Container sx={{ mt: 4, mb: 6 }}>
-        <H2 mb={3}>All Shops</H2>
+        <H2 mb={3}>리뷰 보기</H2>
 
         {/* ALL SHOP LIST AREA */}
         <Grid container spacing={3}>
-          {shopList.map((item) => (
+          {arr.map((item) => (
             <Grid item lg={4} sm={6} xs={12} key={item.id}>
               <ShopCard1
                 name={item.name}
@@ -38,7 +45,7 @@ const ShopList: NextPage<ShopListProps> = ({ shopList }) => {
         <FlexBetween flexWrap="wrap" mt={4}>
           <Span color="grey.600">Showing 1-9 of 300 Shops</Span>
           <Pagination
-            count={shopList.length}
+            count={arr.length}
             variant="outlined"
             color="primary"
           />
