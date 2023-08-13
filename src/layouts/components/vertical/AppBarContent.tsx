@@ -130,14 +130,14 @@ interface Props {
 // ]
 
 const gnbData = [
-  { id: 1, name: ' 대시보드 ' },
-  { id: 2, name: ' 쇼핑몰 구축 ' },
+ // { id: 1, name: ' 대시보드 ' },
+ // { id: 2, name: ' 쇼핑몰 구축 ' },
   { id: 3, name: ' 상품관리 ' },
   { id: 4, name: ' 주문관리 ' },
   { id: 5, name: ' 회원관리 ' },
   { id: 6, name: ' 게시판 ' },
   { id: 7, name: ' 메일/팝업 ' },
-  { id: 8, name: ' 접속통계 ' }
+ // { id: 8, name: ' 접속통계 ' }
 
   // { id: 9, name: '생산' },
   // { id: 10, name: '영업' },

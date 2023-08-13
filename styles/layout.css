@@ -13,6 +13,7 @@
   background-color: transparent;
   border: 0;
   color: rgba(255, 255, 255, 0.6);
+  position:relative
 }
 .fcc .header .gnb-button:hover {
   color: rgba(255, 255, 255, 1);
@@ -25,7 +26,7 @@
   display: block;
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -13px;
   left: 0;
   background-color: #fff;
   height: 2px;
