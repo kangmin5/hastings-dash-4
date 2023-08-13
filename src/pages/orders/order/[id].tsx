@@ -14,7 +14,7 @@ interface Parameters {
   post: string;
 }
 
-const OrderPage: NextPage = ({ post }: Parameters) => {
+const OrderIdPage: NextPage = ({ post }: Parameters) => {
   const [pageSize, setPageSize] = React.useState(10)
   const router = useRouter()
   const dispatch = useAppDispatch()
@@ -414,5 +414,5 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
     </>
   )
 }
-export default OrderPage;
+export default OrderIdPage;
 

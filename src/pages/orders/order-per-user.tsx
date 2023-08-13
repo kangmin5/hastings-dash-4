@@ -1,10 +1,3 @@
-/**
- * ===============================================
- * DATE             AUTHOR          NOTE
- * -----------------------------------------------
- * Mar 23 2023     Paris   Create Board Component DepictSubscription.jsx
- */
-
 import { Box, Button, Card, Checkbox, MenuItem, Select, Table, TableBody, TextField, Typography } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Radio from '@mui/material/Radio'
@@ -29,7 +22,7 @@ const schema = yup.object().shape({
   // ** 추후....
 })
 
-export  function OrdersByUserPage(props) {
+const OrderPerUserPage = () => {
   // ** Hooks
   const dispatch = useAppDispatch()
   const c1 = useSelector(selectCustomerById)
@@ -443,3 +436,4 @@ export  function OrdersByUserPage(props) {
     </Grid>
   )
 }
+export default OrderPerUserPage;

@@ -44,7 +44,7 @@ import { CustomerDetail } from './customer-detail'
 import { getCustomerById } from 'app/customers/org/customer-org/customer-thunk'
 import MuiTabList from '@mui/lab/TabList'
 import { AgreePage } from './agree'
-import { OrdersByUserPage } from 'pages/orders/orders-by-user'
+import { OrdersByUserPage } from 'pages/orders/order-per-user'
 import ReservePage from './point'
 import CartPage from './cart'
 import InquiryByUserPage from 'pages/boards/inquiry-by-user'
@@ -497,7 +497,7 @@ export function ModalPage(props: any) {
               <Button color='primary' variant='outlined' size='small'>
                 취소
               </Button>
-             
+
             </Box> */}
 
           </div>

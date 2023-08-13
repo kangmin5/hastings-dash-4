@@ -17,25 +17,20 @@ export default function navigation(): VerticalNavItemsType {
         {
           id: '2',
           title: '입금주문 관리',
-          path: `/orders/paid-orders`
+          path: `/orders/paid`
         },
         {
           id: '3',
-          title: '고객별 입금주문 관리',
-          path: `/orders/paid-orders/by-customer`
+          title: '미입금주문 관리',
+          path: `/orders/unpaid`
         },
         {
           id: '4',
-          title: '미입금주문 관리',
-          path: `/orders/unpaid-orders`
+          title: '미확정 입금주문 관리',
+          path: `/orders/confirm`
         },
         {
           id: '5',
-          title: '미확정 입금주문 관리',
-          path: `/orders/unpaid-orders/unconfirmed`
-        },
-        {
-          id: '6',
           title: '입금주문 등록',
           path: `/orders/order-add`
         }
@@ -56,28 +51,15 @@ export default function navigation(): VerticalNavItemsType {
       id: '3',
       title: '주문제작 견적 ',
       children: [
-        // {
-        //   id: '1',
-        //   title: '주문제작 아이템 목록',
-        //   path: '/quotes/quick-item'
-        // },
+
         {
           id: '1',
           title: '주문제작 견적서 목록',
           path: '/quotes/quick'
         },
+
         {
           id: '2',
-          title: '주문제작 견적서 상세',
-          path: '/quotes/quick?id='
-        },
-        {
-          id: '3',
-          title: '주문제작 견적서 수정',
-          path: '/quotes/quick-alter?id='
-        },
-        {
-          id: '4',
           title: '주문제작 견적서 항목관리',
           path: '/quotes/quick-item'
         }
@@ -92,16 +74,7 @@ export default function navigation(): VerticalNavItemsType {
           title: '간편 견적서 목록',
           path: '/quotes/simple'
         },
-        {
-          id: '2',
-          title: '간편 견적서 상세',
-          path: '/quotes/simple?id='
-        },
-        {
-          id: '3',
-          title: '간편 견적서 수정',
-          path: '/quotes/simple-alter?id='
-        }
+
       ]
     },
 

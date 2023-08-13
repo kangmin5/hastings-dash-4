@@ -28,7 +28,7 @@ interface Parameters {
   post: string;
 }
 
-const OrderItemPage: NextPage = ({post}: Parameters) => {
+const QuickItemPage: NextPage = ({post}: Parameters) => {
   //**TODO 임시로 order 와 일치시킴 */
   const [pageSize, setPageSize] = React.useState(10)
   const router = useRouter()
@@ -65,4 +65,4 @@ const OrderItemPage: NextPage = ({post}: Parameters) => {
 
 
 
-export default OrderItemPage;
+export default QuickItemPage;
