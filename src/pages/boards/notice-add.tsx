@@ -71,25 +71,7 @@ const NoticeAddPage: NextPage = () => {
   const dragRef = React.useRef<HTMLLabelElement | null>(null);
 
 
-  type Resolver = <T extends z.Schema<any, any>>(
-    schema: T,
-    schemaOptions?: Partial<z.ParseParams>,
-    factoryOptions?: {
-      /**
-       * @default async
-       */
-      mode?: 'async' | 'sync';
-      /**
-       * Return the raw input values rather than the parsed values.
-       * @default false
-       */
-      raw?: boolean;
-    },
-  ) => <TFieldValues extends FieldValues, TContext>(
-    values: TFieldValues,
-    context: TContext | undefined,
-    options: ResolverOptions<TFieldValues>,
-  ) => Promise<ResolverResult<TFieldValues>>;
+
 
   const Zoo: any = z.object({
     title: z.string().nonempty('제목은 필수값입니다'),
@@ -99,14 +81,6 @@ const NoticeAddPage: NextPage = () => {
   });
 
   type Zookeeper = z.infer<typeof Zoo> & { unusedProperty: string };
-
-  interface Props {
-    onSubmit: (data: Zookeeper) => void;
-  }
-
-  // const handleCheck = event => {
-  //   setIsChecked(prevState => !prevState)
-  // }
 
   const {
     register,
@@ -185,11 +159,6 @@ const NoticeAddPage: NextPage = () => {
     const notice = new NoticeBo()
       .article(art)
       .build()
-
-
-
-
-
 
 
     // const child1 = body.children[0].textContent
