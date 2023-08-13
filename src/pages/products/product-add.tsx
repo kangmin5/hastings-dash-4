@@ -1,5 +1,7 @@
-import { Fragment, useState } from 'react'
-
+import React from 'react'
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import { useAppDispatch } from 'custom-hooks'
+import { Icon } from '@iconify/react'
 // ** Next Import
 import Link from 'next/link'
 
@@ -12,7 +14,7 @@ import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import Typography, { TypographyProps } from '@mui/material/Typography'
-
+import { addProduct } from 'app/products/org/product-org/product-thunk';
 import Image from 'next/image'
 import thumb from '/public/images/temp/thumb.svg'
 
@@ -25,9 +27,88 @@ interface FileProp {
   size: number
 }
 import { Card, FormControlLabel, Select, Radio, RadioGroup, MenuItem, FormGroup, Checkbox } from '@mui/material'
+import { ParBuilder } from 'app/products/atom/par-atom'
+import { ProductBo } from 'app/products/mo/product-mo/product-vo'
 
 export default function ProductAddPage() {
-  const [text, setText] = useState('')
+  const [text, setText] = React.useState('')
+
+  const {
+    register,
+    reset,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm();
+  const dispatch = useAppDispatch()
+
+    const onSubmit: SubmitHandler<any> = (data) => {
+      console.log('공지사항 전송 테스트')
+
+      console.log('1--------\n', JSON.stringify(data))
+
+
+      // let htmlString = "<p>Hello</p><a href='http://w3c.org'>W3C</a>"
+      // let x1 = htmlStr.replace(/<[^>]+>/g, '');
+      // console.log('3--------\n', x1)
+
+
+      const arr: string[] = []
+
+
+
+      const isPinned = data.isPinned
+
+      console.log('isPinned : ', isPinned)
+
+      const expose = data.expose
+
+      console.log('expose : ', expose)
+
+      const isPosted = data.isPosted
+
+      console.log('isPosted : ', isPosted)
+
+      const title = data.article.title
+
+      console.log('title : ', title)
+
+
+
+      const par = new ParBuilder()
+
+        .build()
+
+
+      const pro = new ProductBo()
+        .par(par)
+        .build()
+
+
+
+
+      // const child1 = body.children[0].textContent
+      // console.log('5--------\n', child1)
+
+      // const child2 = body.children[1]
+      // console.log('6--------\n', child2)
+
+      // const tttt = body.children[1].textContent
+      // console.log('tttt--------\n', tttt)
+
+      // const a = child2.children[0]
+
+      // console.log('7--------\n', a)
+
+      // const child3 = a.getAttribute('src')
+      // console.log('8--------\n', child3)
+
+      // const b = body.children[1].textContent
+
+
+      dispatch(addProduct(pro))
+
+    }
 
   const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
     setText(event.target.value)

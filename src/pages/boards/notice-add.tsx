@@ -2,8 +2,12 @@
 import React, { useCallback } from 'react'
 import type { GetStaticProps, NextPage } from "next"
 import dynamic from 'next/dynamic';
-import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import {
+  useForm, SubmitHandler, Controller,
+  FieldValues, ResolverResult, ResolverOptions
+} from "react-hook-form"
 import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Box,
   Button,
@@ -16,12 +20,14 @@ import {
   Table,
   TableBody,
   TextField,
-  Typography
+  Typography,
+  FormHelperText,
 } from '@mui/material'
 import styled from 'styled-components';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import EditorControlled from 'views/forms/form-elements/editor/EditorControlled'
+import ZooText from 'pages/utils/zoo-text'
 import { Icon } from '@iconify/react'
 // import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -41,19 +47,13 @@ import { AttachBuilder } from 'app/boards/atom/attach-atom';
 import { TimeAtom, TimeBuilder } from 'app/utils/atom/time-atom';
 import { DateMap } from 'app/utils/atom/date-atom';
 import Link from 'next/link';
-// ** Editor Imports
-// import dynamic from 'next/dynamic'
+import { ZooForm } from 'pages/utils/zoo-control';
 
-// ** Components Imports
-// import { DragDrop } from 'views'
-
-// 해당 인터페이스는 컴포넌트 밖에 작성해주세요!
 interface IFileTypes {
   id: number; // 파일들의 고유값 id
   object: File;
 }
 
-// ** 016. customer-service / messenger / register-notice 공지사항 등록
 const NoticeAddPage: NextPage = () => {
 
   const [files, setFiles] = React.useState<IFileTypes[]>([]);
@@ -71,26 +71,42 @@ const NoticeAddPage: NextPage = () => {
   const dragRef = React.useRef<HTMLLabelElement | null>(null);
 
 
-  const Zoo: any = z.object({
-    bizName: z.string().min(1, "회사 이름은 1글자 이상이어야 합니다."),
-    ceo: z.string().min(1, "대표자 이름은 1글자 이상이어야 합니다."),
-    bizNo: z.string().min(1, "사업자 등록번호는 중복체크를 해주세요."),
-    corpNo: z.string().min(1, "법인 등록번호는 1글자 이상이어야 합니다."),
-    bizKind: z.string().min(1, "업태는 1글자 이상이어야 합니다."),
-    bizItem: z.string().min(1, "법인 등록번호는 1글자 이상이어야 합니다."),
+  type Resolver = <T extends z.Schema<any, any>>(
+    schema: T,
+    schemaOptions?: Partial<z.ParseParams>,
+    factoryOptions?: {
+      /**
+       * @default async
+       */
+      mode?: 'async' | 'sync';
+      /**
+       * Return the raw input values rather than the parsed values.
+       * @default false
+       */
+      raw?: boolean;
+    },
+  ) => <TFieldValues extends FieldValues, TContext>(
+    values: TFieldValues,
+    context: TContext | undefined,
+    options: ResolverOptions<TFieldValues>,
+  ) => Promise<ResolverResult<TFieldValues>>;
 
-    userId: z.string().min(1, "사용자아이디는 1글자 이상이어야 합니다."),
-    password: z.string().min(1, "비밀번호는 1글자 이상이어야 합니다."),
-    PW_CONFIRM: z.string().min(1, "비밀번호는 한번 더 입력하세요."),
-    name: z.string().min(1, "이름은 1글자 이상이어야 합니다."),
-    email: z.string().min(1, "이메일은 1글자 이상이어야 합니다."),
-    phone: z.string().min(1, "휴대전화는 1글자 이상이어야 합니다."),
-    address: z.string().min(1, "주소는 검색버튼을 클릭하세요.")
+  const Zoo: any = z.object({
+    title: z.string().nonempty('제목은 필수값입니다'),
+    isPosted: z.string(),
+    expose: z.string(),
+    isPinned: z.string()
   });
 
-  const handleCheck = event => {
-    setIsChecked(prevState => !prevState)
+  type Zookeeper = z.infer<typeof Zoo> & { unusedProperty: string };
+
+  interface Props {
+    onSubmit: (data: Zookeeper) => void;
   }
+
+  // const handleCheck = event => {
+  //   setIsChecked(prevState => !prevState)
+  // }
 
   const {
     register,
@@ -98,7 +114,18 @@ const NoticeAddPage: NextPage = () => {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm();
+  } = useForm<Zookeeper>({
+    mode: "onSubmit",
+    defaultValues: {
+      title: "",
+      isPosted: "Y",
+      expose: "all",
+      isPinned: "N"
+
+    },
+    resolver: zodResolver(Zoo), // Useful to check TypeScript regressions
+  });
+
   const onSubmit: SubmitHandler<any> = (data) => {
     console.log('공지사항 전송 테스트')
     console.log(roof.current)
@@ -139,7 +166,7 @@ const NoticeAddPage: NextPage = () => {
 
     console.log('isPosted : ', isPosted)
 
-    const title = data.article.title
+    const title = data.title
 
     console.log('title : ', title)
 
@@ -162,6 +189,9 @@ const NoticeAddPage: NextPage = () => {
 
 
 
+
+
+
     // const child1 = body.children[0].textContent
     // console.log('5--------\n', child1)
 
@@ -180,7 +210,8 @@ const NoticeAddPage: NextPage = () => {
 
     // const b = body.children[1].textContent
 
-    dispatch(addNotice(notice))
+    // dispatch(addNotice(notice))
+    alert(' 공지사항 등록 : '+ JSON.stringify(notice))
 
   }
 
@@ -297,17 +328,10 @@ const NoticeAddPage: NextPage = () => {
   }, [initDragEvents, resetDragEvents]);
 
 
-
-
-
   return (
     <>
-
-      <Card className='register-box'>
-        <Typography variant='h2'>공지사항 관리</Typography>
-        <form onSubmit={handleSubmit(onSubmit)}>
-
-
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Card className='register-box'>
           <Box className='h3-back-styled'>
             <h3>공지사항 등록</h3>
           </Box>
@@ -324,21 +348,24 @@ const NoticeAddPage: NextPage = () => {
                   <th scope='row'>게시여부</th>
                   <td >
                     <FormControl component="fieldset"  >
+                      {/* <FormLabel id="demo-radio-buttons-group-label">게시여부</FormLabel> */}
                       <Controller
-                        {...register("article.isPosted")}
+
                         rules={{ required: true }}
                         control={control}
                         name="isPosted"
                         defaultValue={'Y'}
-                        render={({ field }) => {
-                          // console.log(field)
-                          return (
-                            <RadioGroup row aria-label='position' name='horizontal' {...field}>
+                        render={(
+                          {field}
+                        ) => (
+                            <RadioGroup row aria-label='position' name='isPosted'
+                            {...field}
+                            >
                               <FormControlLabel value='Y' control={<Radio />} label='게시' />
                               <FormControlLabel value='N' control={<Radio />} label='미게시' />
                             </RadioGroup>
-                          );
-                        }}
+                          )
+                        }
                       />
                     </FormControl>
                   </td>
@@ -346,56 +373,97 @@ const NoticeAddPage: NextPage = () => {
                 <tr>
                   <th scope='row'>노출여부</th>
                   <td >
-                    <FormControl component="fieldset"   >
+
+                      {/* <FormLabel id="demo-radio-buttons-group-label">노출여부</FormLabel> */}
                       <Controller
-                        {...register("article.expose")}
                         rules={{ required: true }}
                         control={control}
                         name="expose"
                         defaultValue={'all'}
-                        render={({ field }) => {
-                          console.log(field)
-                          return (
-                            <RadioGroup row aria-label='position' name='horizontal' {...field}>
+                        render={(
+                          {
+                            field: { value, onChange, onBlur, ref },
+                            fieldState: { error },
+                          }
+                        ) => (
+                            <FormControl component="fieldset"   >
+                            <RadioGroup row aria-label='position' name='expose'
+                              value={value}
+                              onChange={onChange}>
                               <FormControlLabel value='all' label='전체' labelPlacement='end' control={<Radio />} />
                               <FormControlLabel value='web' control={<Radio />} label='웹' />
                               <FormControlLabel value='mobile' control={<Radio />} label='모바일' />
                             </RadioGroup>
-                          );
-                        }}
+                            </FormControl>
+                          )}
                       />
-                    </FormControl>
+
                   </td>
                 </tr>
                 <tr>
                   <th scope='row' >제목</th>
                   <td >
                     <div className='form-wrap'>
-                      {/* <input {...register("firstName")} />  */}
-                      <TextField sx={{ width: '720px' }} {...register("article.title")} />
-                      {/* Checkbox  */}
-                      <FormControl component="fieldset" >
+
+                      <Controller
+                        rules={{ required: true }}
+                        control={control}
+                        name="title"
+                        defaultValue={''}
+                        render={(
+                          {
+                            field: { value, onChange, onBlur, ref },
+                            fieldState: { error },
+                          }
+                        ) => (
+                          <FormControl component="fieldset" >
+                            <TextField
+                              variant='outlined'
+                              name="title"
+                              placeholder="제목을 입력하세요"
+                              inputRef={ref}
+                              value={value}
+                              onChange={onChange}
+                              onBlur={onBlur}
+                              error={Boolean(error)}
+                              sx={{ width: '720px' }} />
+                            <FormHelperText
+                              sx={{
+                                color: 'error.main',
+                              }}
+                            >
+                              {error?.message ?? ''}
+                            </FormHelperText>
+                          </FormControl>
+                        )}
+                      />
+
                         <Controller
-                          {...register("article.isPinned")}
+
                           rules={{ required: true }}
                           control={control}
                           name="isPinned"
                           defaultValue={'N'}
-                          render={({ field }) => {
-                            console.log(field)
-                            return (
+                          render={(
+                            {
+                              field: { onChange, ...props },
+                              fieldState: { error },
+                            }
+                          ) => (
+                            <FormControl component="fieldset" >
                               <FormControlLabel
-
+                              onChange={onChange}
                                 value='Y'
                                 label='상단고정'
                                 labelPlacement='end'
                                 control={<Checkbox />}
                                 className='label'
                               />
-                            );
-                          }}
+                                 </FormControl>
+                            )}
                         />
-                      </FormControl>
+
+
                     </div>
                   </td>
                 </tr>
@@ -405,10 +473,10 @@ const NoticeAddPage: NextPage = () => {
                     <span style={{ display: isChecked ? '' : 'none' }}>내용(웹)</span>
                   </th>
                   <td >
-                  <div className='editor-inline-box'>
-                    <EditorContainer>
-                      <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
-                    </EditorContainer>
+                    <div className='editor-inline-box'>
+                      <EditorContainer>
+                        <Editor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
+                      </EditorContainer>
                     </div>
                   </td>
                 </tr>
@@ -418,31 +486,31 @@ const NoticeAddPage: NextPage = () => {
 
                   </th>
                   <td>
-                  <div style={{ color: 'rgba(58, 53, 65, 0.24)', marginBottom: '16.9px' }}>
-                    <input
-                      type="file"
-                      id="fileUpload"
-                      style={{ display: "none" }} // label을 이용하여 구현하기에 없애줌
-                      multiple={true} // 파일 다중선택 허용
-                    />
+                    <div style={{ color: 'rgba(58, 53, 65, 0.24)', marginBottom: '16.9px' }}>
+                      <input
+                        type="file"
+                        id="fileUpload"
+                        style={{ display: "none" }} // label을 이용하여 구현하기에 없애줌
+                        multiple={true} // 파일 다중선택 허용
+                      />
 
-                    <label
-                      className={isDragging ? "fcc-DragDrop-File-Dragging" : "fcc-DragDrop-File"}
-                      // 드래그 중일때와 아닐때의 클래스 이름을 다르게 주어 스타일 차이
+                      <label
+                        className={isDragging ? "fcc-DragDrop-File-Dragging" : "fcc-DragDrop-File"}
+                        // 드래그 중일때와 아닐때의 클래스 이름을 다르게 주어 스타일 차이
 
-                      htmlFor="fileUpload"
-                      ref={dragRef}
-                    >
+                        htmlFor="fileUpload"
+                        ref={dragRef}
+                      >
 
 
-          <Icon fontSize={50} icon='octicon:file-directory-open-fill-16' />
+                        <Icon fontSize={50} icon='octicon:file-directory-open-fill-16' />
 
-        <div className='Image-label'>
-          <Typography>- 10MB 이하의 이미지만 업로드 가능합니다.</Typography>
-          <Typography>- 파일형식 : gif,jpg,png,pdf,excel,docx</Typography>
-          <Typography>- 업로드할 파일을 한꺼번에 드래그해서 해당 영역에 올려주세요.</Typography>
-        </div>
-      </label></div>
+                        <div className='Image-label'>
+                          <Typography>- 10MB 이하의 이미지만 업로드 가능합니다.</Typography>
+                          <Typography>- 파일형식 : gif,jpg,png,pdf,excel,docx</Typography>
+                          <Typography>- 업로드할 파일을 한꺼번에 드래그해서 해당 영역에 올려주세요.</Typography>
+                        </div>
+                      </label></div>
                     <div className="fcc-DragDrop-Files">
                       {files.length > 0 &&
                         files.map((file: IFileTypes) => {
@@ -478,9 +546,9 @@ const NoticeAddPage: NextPage = () => {
                         onClick={() => reset()}>
                         취소
                       </Button>
-                      <Button variant='contained' size='large' color='success'
+                      <Button variant='contained' size='large'
                         style={{ width: '350px' }}
-                        onClick={() => alert()}>
+                        type='submit'>
                         등록
                       </Button>
                     </div>
@@ -491,8 +559,9 @@ const NoticeAddPage: NextPage = () => {
           </div>
 
 
-        </form>
-      </Card>
+
+        </Card>
+      </form>
     </>
   )
 }
@@ -545,3 +614,6 @@ const Contents = {
         }
     `,
 }
+
+
+//** https://github.com/gitdagray/zod-typescript-react-hook-form/blob/main/src/models/Example.ts */

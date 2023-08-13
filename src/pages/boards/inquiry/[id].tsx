@@ -383,12 +383,12 @@ export default function InquiryIdPage() {
 
                     <div className='btn-align' style={{ float: 'left' }}>
 
-                      <Button variant='outlined' size='large' color='primary'
+                      <Button variant='outlined' size='large'
                         style={{ width: '350px' }}
                         onClick={() => reset()}>
                         취소
                       </Button>
-                      <Button variant='contained' size='large' color='success'
+                      <Button variant='contained' size='large'
                         style={{ width: '350px' }}
                         onClick={() => alert()}>
                         등록

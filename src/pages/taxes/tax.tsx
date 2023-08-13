@@ -6,10 +6,8 @@ import { RootState } from 'store'
 import TaxInvoiceApplications, { TaxInvoiceApplication } from 'app/accounting/tax-invoice-issuer/tax-invoice-applications'
 import { allTaxInvoiceApplications } from 'app/accounting/tax-invoice-issuer/tax-invoice-applications/repository'
 import { TaxInvoiceApplicationGridColumns } from "app/technical-support/flyweight"
-import MyDatePicker from 'app/technical-support/memento/date-pickers/mine'
 import { DataGrid, GridRowId } from '@mui/x-data-grid'
 import Link from 'next/link'
-import Labels from "app/general-affairs/stylist/labels"
 import {
   Box,
   Button,

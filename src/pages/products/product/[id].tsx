@@ -26,7 +26,7 @@ interface FileProp {
 }
 import { Card, FormControlLabel, Select, Radio, RadioGroup, MenuItem, FormGroup, Checkbox } from '@mui/material'
 
-export default function ProductAddPage() {
+export default function ProductIdPage() {
   const [text, setText] = useState('')
 
   const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
@@ -727,7 +727,7 @@ export default function ProductAddPage() {
         <Button variant='outlined' size='medium' color='info'>
           수정
         </Button>
-       
+
       </div>
     </>
   )

@@ -60,16 +60,12 @@ import { VerticalNavItemsType } from '@core/layouts/types'
       children: [
         {
           id: `1`,
-          title: '1:1 답변 목록',
+          title: '1:1 질문 관리',
           path: `/boards/inquiry`
         },
+
         {
           id: `2`,
-          title: '1:1 질문 답변',
-          path: `/boards/inquiry-answer`
-        },
-        {
-          id: `3`,
           title: '1:1 질문 타입',
           path: `/boards/inquiry-kind`
         }
