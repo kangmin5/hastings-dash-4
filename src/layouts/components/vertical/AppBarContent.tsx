@@ -10,6 +10,10 @@ import Icon from '@core/components/icon'
 import { selectLnbId } from 'app/valves/org/lnb-org/lnb-selector';
 import { Settings } from '@core/context/settingsContext'
 
+import Link from 'next/link'
+import { styled, useTheme } from '@mui/material/styles'
+import Typography, { TypographyProps } from '@mui/material/Typography'
+
 // ** Components
 import Autocomplete from 'layouts/components/Autocomplete'
 
@@ -130,14 +134,14 @@ interface Props {
 // ]
 
 const gnbData = [
- // { id: 1, name: ' 대시보드 ' },
- // { id: 2, name: ' 쇼핑몰 구축 ' },
+  // { id: 1, name: ' 대시보드 ' },
+  // { id: 2, name: ' 쇼핑몰 구축 ' },
   { id: 3, name: ' 상품관리 ' },
   { id: 4, name: ' 주문관리 ' },
   { id: 5, name: ' 회원관리 ' },
   { id: 6, name: ' 게시판 ' },
   { id: 7, name: ' 메일/팝업 ' },
- // { id: 8, name: ' 접속통계 ' }
+  // { id: 8, name: ' 접속통계 ' }
 
   // { id: 9, name: '생산' },
   // { id: 10, name: '영업' },
@@ -169,6 +173,20 @@ const AppBarContent = (props: Props) => {
   const selectedId = useSelector(selectLnbId);
   console.log("선택한 사이드메뉴 ", selectedId);
 
+  const LinkStyled = styled(Link)({
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none'
+  })
+
+  const HeaderTitle = styled(Typography)<TypographyProps>(({ theme }) => ({
+    fontWeight: 600,
+    lineHeight: 'normal',
+    textTransform: 'uppercase',
+    color: theme.palette.text.primary,
+    transition: 'opacity .25s ease-in-out, margin .25s ease-in-out'
+  }))
+
   React.useEffect(() => {
 
     const gnbButtons = Array.from(document.getElementsByClassName('gnb-button') as HTMLCollectionOf<HTMLElement>)
@@ -191,6 +209,11 @@ const AppBarContent = (props: Props) => {
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
+      <LinkStyled href='/'>
+          <HeaderTitle variant='h1' sx={{ color: '#fff' }}>
+            혜림봉투
+          </HeaderTitle>
+        </LinkStyled>
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center', height: '100%' }}>
         {gnbData.map(data => {
           return (

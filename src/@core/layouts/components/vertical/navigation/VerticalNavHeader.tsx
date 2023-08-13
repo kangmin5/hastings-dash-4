@@ -84,9 +84,9 @@ const VerticalNavHeader = (props: Props) => {
         userNavMenuBranding(props)
       ) : (
         <LinkStyled href='/'>
-          <HeaderTitle variant='h1' sx={{ color: '#fff' }}>
+          {/* <HeaderTitle variant='h1' sx={{ color: '#fff' }}>
             혜림봉투
-          </HeaderTitle>
+          </HeaderTitle> */}
         </LinkStyled>
       )}
 
