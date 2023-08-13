@@ -56,28 +56,28 @@ export default function navigation(): VerticalNavItemsType {
       id: '3',
       title: '주문제작 견적 ',
       children: [
+        // {
+        //   id: '1',
+        //   title: '주문제작 아이템 목록',
+        //   path: '/quotes/quick-item'
+        // },
         {
           id: '1',
-          title: '주문제작 아이템 목록',
-          path: '/quotes/quick-item'
-        },
-        {
-          id: '2',
           title: '주문제작 견적서 목록',
           path: '/quotes/quick'
         },
         {
-          id: '3',
+          id: '2',
           title: '주문제작 견적서 상세',
           path: '/quotes/quick?id='
         },
         {
-          id: '4',
+          id: '3',
           title: '주문제작 견적서 수정',
           path: '/quotes/quick-alter?id='
         },
         {
-          id: '5',
+          id: '4',
           title: '주문제작 견적서 항목관리',
           path: '/quotes/quick-item'
         }
