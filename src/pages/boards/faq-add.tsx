@@ -2,7 +2,12 @@
 import React from 'react'
 import type { GetStaticProps, NextPage } from "next"
 import styled from 'styled-components';
-import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import {
+  useForm, SubmitHandler, Controller,
+  FieldValues, ResolverResult, ResolverOptions
+} from "react-hook-form"
+import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useAppDispatch } from 'custom-hooks'
 import { Icon } from '@iconify/react'
 // ** MUI Imports

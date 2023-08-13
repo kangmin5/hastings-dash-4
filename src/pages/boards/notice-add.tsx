@@ -1,13 +1,5 @@
-// ** React Imports
-import React, { useCallback } from 'react'
-import type { GetStaticProps, NextPage } from "next"
-import dynamic from 'next/dynamic';
-import {
-  useForm, SubmitHandler, Controller,
-  FieldValues, ResolverResult, ResolverOptions
-} from "react-hook-form"
-import { z } from 'zod'
-import { zodResolver } from "@hookform/resolvers/zod";
+import React from 'react'
+import type { NextPage } from "next"
 import {
   Box,
   Button,
@@ -24,30 +16,18 @@ import {
   FormHelperText,
 } from '@mui/material'
 import styled from 'styled-components';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import EditorControlled from 'views/forms/form-elements/editor/EditorControlled'
-import ZooText from 'pages/utils/zoo-text'
+
 import { Icon } from '@iconify/react'
-// import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import ReactQuill from 'react-quill';  // ssr 설정을 위해 주석처리
-import "draft-js/dist/Draft.css";
-//import draftToHtml from "draftjs-to-html";
 import { NoticeBo, NoticeVo } from 'app/boards/mo/notice-mo/notice-vo'
+import dynamic from 'next/dynamic';
 const Editor = dynamic(() => import('./notice-editor'), { ssr: false }); // client 사이드에서만 동작되기 때문에 ssr false로 설정
 import { useAppDispatch } from 'custom-hooks'
-import axios from 'axios';
-import { RangeStatic } from 'quill';
-import { NoticeUrl as url } from 'app/boards/org/notice-org/notice-union'
-import { SubmitButton } from 'app/valves/temp/button-temp/submit-button';
-import { addNotice } from 'app/boards/org/notice-org/notice-thunk';
 import { ArticleBuilder } from 'app/boards/atom/article-atom';
-import { AttachBuilder } from 'app/boards/atom/attach-atom';
-import { TimeAtom, TimeBuilder } from 'app/utils/atom/time-atom';
-import { DateMap } from 'app/utils/atom/date-atom';
-import Link from 'next/link';
-import { ZooForm } from 'pages/utils/zoo-control';
+
+import { useForm, SubmitHandler, Controller,} from "react-hook-form"
+import { z } from 'zod'
+import { zodResolver } from "@hookform/resolvers/zod";
+import FormControl from '@mui/material/FormControl';
 
 interface IFileTypes {
   id: number; // 파일들의 고유값 id
@@ -69,9 +49,6 @@ const NoticeAddPage: NextPage = () => {
 
   // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
   const dragRef = React.useRef<HTMLLabelElement | null>(null);
-
-
-
 
   const Zoo: any = z.object({
     title: z.string().nonempty('제목은 필수값입니다'),
@@ -144,8 +121,6 @@ const NoticeAddPage: NextPage = () => {
 
     console.log('title : ', title)
 
-
-
     const art = new ArticleBuilder()
       .isPinned(isPinned)
       .expose(expose)
@@ -153,8 +128,6 @@ const NoticeAddPage: NextPage = () => {
       .isPosted(isPosted)
       .content(htmlStr)
       .build()
-
-
 
     const notice = new NoticeBo()
       .article(art)
@@ -184,38 +157,32 @@ const NoticeAddPage: NextPage = () => {
 
   }
 
-
   const [htmlStr, setHtmlStr] = React.useState<string>('');
 
   const roof = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (roof.current) {
-
-
       //  console.log(' ::::: 이미지 등록 ::::: \n', htmlStr)
-
       //roof.current.innerHTML = '<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>'
       //roof.current.innerHTML += htmlStr;
     }
-
-
   }, [htmlStr])
 
 
-  const handleDragIn = useCallback((e: DragEvent): void => {
+  const handleDragIn = React.useCallback((e: DragEvent): void => {
     e.preventDefault();
     e.stopPropagation();
   }, []);
 
-  const handleDragOut = useCallback((e: DragEvent): void => {
+  const handleDragOut = React.useCallback((e: DragEvent): void => {
     e.preventDefault();
     e.stopPropagation();
 
     setIsDragging(false);
   }, []);
 
-  const handleDragOver = useCallback((e: DragEvent): void => {
+  const handleDragOver = React.useCallback((e: DragEvent): void => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -224,7 +191,7 @@ const NoticeAddPage: NextPage = () => {
     }
   }, []);
 
-  const onChangeFiles = useCallback((e: React.ChangeEvent<HTMLInputElement> | any): void => {
+  const onChangeFiles = React.useCallback((e: React.ChangeEvent<HTMLInputElement> | any): void => {
     let selectFiles: File[] = [];
     let tempFiles: IFileTypes[] = files;
     // temp 변수를 이용하여 선택했던 파일들을 담습니다.
@@ -252,7 +219,7 @@ const NoticeAddPage: NextPage = () => {
     setFiles(tempFiles);
   }, [files]); // 위에서 선언했던 files state 배열을 deps에 넣어줍니다.
 
-  const handleDrop = useCallback(
+  const handleDrop = React.useCallback(
     (e: DragEvent): void => {
       e.preventDefault();
       e.stopPropagation();
@@ -263,7 +230,7 @@ const NoticeAddPage: NextPage = () => {
     [onChangeFiles]
   );
 
-  const initDragEvents = useCallback((): void => {
+  const initDragEvents = React.useCallback((): void => {
     // 앞서 말했던 4개의 이벤트에 Listener를 등록합니다. (마운트 될때)
 
     if (dragRef.current !== null) {
@@ -274,7 +241,7 @@ const NoticeAddPage: NextPage = () => {
     }
   }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
 
-  const resetDragEvents = useCallback((): void => {
+  const resetDragEvents = React.useCallback((): void => {
     // 앞서 말했던 4개의 이벤트에 Listener를 삭제합니다. (언마운트 될때)
 
     if (dragRef.current !== null) {
@@ -285,7 +252,7 @@ const NoticeAddPage: NextPage = () => {
     }
   }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
 
-  const handleFilterFile = useCallback((id: number): void => {
+  const handleFilterFile = React.useCallback((id: number): void => {
     // 매개변수로 받은 id와 일치하지 않는지에 따라서 filter 해줍니다.
     setFiles(files.filter((file: any) => file.id !== id));
   }, [files]);
