@@ -662,7 +662,7 @@ const OrderAddPage: NextPage = () => {
                     <th scope='row'>누적주문</th>
                     <td>
                       <div className='form-wrap ss'>
-                        <p>총 주문횟수 : &nbsp;&nbsp;&nbsp;&nbsp;
+                        <div>총 주문횟수 : &nbsp;&nbsp;&nbsp;&nbsp;
 
                           <Controller
                             rules={{ required: true }}
@@ -733,7 +733,7 @@ const OrderAddPage: NextPage = () => {
                             )}
                           />
                           &nbsp;&nbsp;&nbsp;&nbsp;
-                          원 (배송완료 기준)</p>
+                          원 (배송완료 기준)</div>
                       </div>
                     </td>
                   </tr>
@@ -1136,7 +1136,7 @@ const OrderAddPage: NextPage = () => {
                           )}
                         /> &nbsp;&nbsp;&nbsp;&nbsp;
   】
-</div><div className='form-group'><p>
+</div><div className='form-group'><div>
                         (예금주 :  &nbsp;&nbsp;&nbsp;&nbsp;
 
                         <Controller
@@ -1172,7 +1172,7 @@ const OrderAddPage: NextPage = () => {
                         />
  &nbsp;&nbsp;&nbsp;&nbsp;
 
-                        )</p>
+                        )</div>
                       </div>
 
                     </td>

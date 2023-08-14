@@ -85,7 +85,7 @@ export class AuthorService {
     console.log('2-비밀번호 : ', authorVo.password)
 
     const { method, url, headers, data }: AjaxVo = this.service.http({
-      url: 'admin/authors/staff?do=login',
+      url: 'admin/systems/staff?do=login',
       method: 'post',
       data: {
         enName: authorVo.enName,

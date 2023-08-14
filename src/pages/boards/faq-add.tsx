@@ -427,7 +427,9 @@ render={(
                   <span >첨부파일</span>
 
 </th>
-<td> <div style={{ color: 'rgba(58, 53, 65, 0.24)', marginBottom: '16.9px' }}>
+<td>
+
+   <div style={{ color: 'rgba(58, 53, 65, 0.24)', marginBottom: '16.9px' }}>
                     <input
                       type="file"
                       id="fileUpload"

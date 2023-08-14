@@ -4,34 +4,53 @@ import { useAppDispatch } from 'custom-hooks'
 import { Icon } from '@iconify/react'
 // ** Next Import
 import Link from 'next/link'
-
+import styled from 'styled-components';
 // ** MUI Imports
 import Box from '@mui/material/Box'
 import List from '@mui/material/List'
 import Button from '@mui/material/Button'
 import ListItem from '@mui/material/ListItem'
-import { styled } from '@mui/material/styles'
+//import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import { addProduct } from 'app/products/org/product-org/product-thunk';
 import Image from 'next/image'
 import thumb from '/public/images/temp/thumb.svg'
-
+import dynamic from 'next/dynamic';
+const Editor = dynamic(() => import('./product-editor'), { ssr: false });
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
-
+import FileUpload from './file-upload'
 interface FileProp {
   name: string
   type: string
   size: number
 }
-import { Card, FormControlLabel, Select, Radio, RadioGroup, MenuItem, FormGroup, Checkbox } from '@mui/material'
+import {
+  Card,
+  FormControlLabel,
+  Select,
+  Radio,
+  RadioGroup,
+  MenuItem,
+  FormGroup,
+  Checkbox,
+  FormControl,
+  FormHelperText
+} from '@mui/material'
 import { ParBuilder } from 'app/products/atom/par-atom'
 import { ProductBo } from 'app/products/mo/product-mo/product-vo'
 
+interface IFileTypes {
+  id: number; // 파일들의 고유값 id
+  object: File;
+}
+
 export default function ProductAddPage() {
   const [text, setText] = React.useState('')
+  const [isMainImageRadio, setIsMainImageRadio] = React.useState(true)
+  const [htmlStr, setHtmlStr] = React.useState<string>('');
 
   const {
     register,
@@ -114,6 +133,118 @@ export default function ProductAddPage() {
     setText(event.target.value)
   }
 
+
+
+  const [files, setFiles] = React.useState<IFileTypes[]>([]);
+    // ** next ReferenceError: window is not defined 해결 방법
+
+    // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
+    const [isDragging, setIsDragging] = React.useState<boolean>(false);
+
+    // 각 선택했던 파일들의 고유값 id
+    const fileId = React.useRef<number>(0);
+
+    // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
+    const dragRef = React.useRef<HTMLLabelElement | null>(null);
+
+
+    const handleDragIn = React.useCallback((e: DragEvent): void => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, []);
+
+    const handleDragOut = React.useCallback((e: DragEvent): void => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      setIsDragging(false);
+    }, []);
+
+    const handleDragOver = React.useCallback((e: DragEvent): void => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (e.dataTransfer!.files) {
+        setIsDragging(true);
+      }
+    }, []);
+
+    const onChangeFiles = React.useCallback((e: React.ChangeEvent<HTMLInputElement> | any): void => {
+      let selectFiles: File[] = [];
+      let tempFiles: IFileTypes[] = files;
+      // temp 변수를 이용하여 선택했던 파일들을 담습니다.
+
+      // 드래그 했을 때와 안했을 때 가리키는 파일 배열을 다르게 해줍니다.
+      if (e.type === "drop") {
+        // 드래그 앤 드롭 했을때
+        selectFiles = e.dataTransfer.files;
+      } else {
+        // "파일 첨부" 버튼을 눌러서 이미지를 선택했을때
+        selectFiles = e.target.files;
+      }
+
+      for (const file of selectFiles) {
+        // 스프레드 연산자를 이용하여 기존에 있던 파일들을 복사하고, 선택했던 파일들을 append 해줍니다.
+        tempFiles = [
+          ...tempFiles,
+          {
+            id: fileId.current++, // fileId의 값을 1씩 늘려주면서 각 파일의 고유값으로 사용합니다.
+            object: file // object 객체안에 선택했던 파일들의 정보가 담겨있습니다.
+          }
+        ];
+      }
+
+      setFiles(tempFiles);
+    }, [files]); // 위에서 선언했던 files state 배열을 deps에 넣어줍니다.
+
+    const handleDrop = React.useCallback(
+      (e: DragEvent): void => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        onChangeFiles(e);
+        setIsDragging(false);
+      },
+      [onChangeFiles]
+    );
+
+    const initDragEvents = React.useCallback((): void => {
+      // 앞서 말했던 4개의 이벤트에 Listener를 등록합니다. (마운트 될때)
+
+      if (dragRef.current !== null) {
+        dragRef.current.addEventListener("dragenter", handleDragIn);
+        dragRef.current.addEventListener("dragleave", handleDragOut);
+        dragRef.current.addEventListener("dragover", handleDragOver);
+        dragRef.current.addEventListener("drop", handleDrop);
+      }
+    }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
+
+    const resetDragEvents = React.useCallback((): void => {
+      // 앞서 말했던 4개의 이벤트에 Listener를 삭제합니다. (언마운트 될때)
+
+      if (dragRef.current !== null) {
+        dragRef.current.removeEventListener("dragenter", handleDragIn);
+        dragRef.current.removeEventListener("dragleave", handleDragOut);
+        dragRef.current.removeEventListener("dragover", handleDragOver);
+        dragRef.current.removeEventListener("drop", handleDrop);
+      }
+    }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
+
+    const handleFilterFile = React.useCallback((id: number): void => {
+      // 매개변수로 받은 id와 일치하지 않는지에 따라서 filter 해줍니다.
+      setFiles(files.filter((file: any) => file.id !== id));
+    }, [files]);
+
+    const IsMainImageRadioChange = () => {
+      setIsMainImageRadio(false)
+    }
+
+    React.useEffect(() => {
+      initDragEvents();
+
+      return () => resetDragEvents();
+    }, [initDragEvents, resetDragEvents]);
+
   return (
     <>
       <Typography variant='h2'>상품 등록</Typography>
@@ -143,27 +274,59 @@ export default function ProductAddPage() {
                   진열상태<span className='essential'>*</span>
                 </th>
                 <td>
+                <Controller
+rules={{ required: true }}
+control={control}
+name="isPosted"
+defaultValue={'Y'}
+render={(
+  {field}
+) => (
                   <RadioGroup row defaultValue='진열안함'>
                     <FormControlLabel value='진열함' label='진열함' control={<Radio />} />
                     <FormControlLabel value='진열안함' label='진열안함' control={<Radio />} />
                   </RadioGroup>
+                      )} />
                 </td>
                 <th scope='row'>
                   판매상태<span className='essential'>*</span>
                 </th>
                 <td>
+                <Controller
+rules={{ required: true }}
+control={control}
+name="isPosted"
+defaultValue={'Y'}
+render={(
+  {field}
+) => (
                   <RadioGroup row defaultValue='판매함'>
                     <FormControlLabel value='판매함' label='판매함' control={<Radio />} />
                     <FormControlLabel value='판매안함' label='판매안함' control={<Radio />} />
                   </RadioGroup>
+                       )} />
                 </td>
               </tr>
               <tr>
                 <th scope='row'>메인 노출</th>
                 <td colSpan={3}>
+                <Controller
+
+rules={{ required: true }}
+control={control}
+name="isPinned"
+defaultValue={'N'}
+render={(
+  {
+    field: { onChange, ...props },
+    fieldState: { error },
+  }
+) => (
                   <FormGroup row>
                     <FormControlLabel control={<Checkbox />} label='메인추천상품' />
                   </FormGroup>
+                   )}
+                   />
                 </td>
               </tr>
               <tr>
@@ -313,63 +476,188 @@ export default function ProductAddPage() {
                   상품명<span className='essential'>*</span>
                 </th>
                 <td colSpan={3}>
-                  <div className='form-wrap row'>
-                    <TextField
-                      value={text}
-                      onChange={handleChange}
-                      inputProps={{ maxLength: 50 }}
-                      helperText={`${text.length}/50자`}
-                      fullWidth
-                    />
-                    <TextField
-                      value={text}
-                      onChange={handleChange}
-                      inputProps={{ maxLength: 50 }}
-                      helperText={`${text.length}/50자`}
-                      fullWidth
-                    />
+                  <div className='form-wrap '>
+                  <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder="상품명 1"
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '295px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
+                     <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder="상품명 2"
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '295px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                   </div>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>추가상품명</th>
                 <td colSpan={3}>
-                  <div className='form-wrap row'>
-                    <TextField
-                      value={text}
-                      onChange={handleChange}
-                      inputProps={{ maxLength: 200 }}
-                      helperText={`${text.length}/200자`}
-                      fullWidth
-                    />
+                  <div className='form-wrap'>
+                  <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder="상품명 2"
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '600px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                   </div>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>상품설명</th>
                 <td colSpan={3}>
-                  <div className='form-wrap row'>
-                    <TextField
-                      value={text}
-                      onChange={handleChange}
-                      inputProps={{ maxLength: 200 }}
-                      helperText={`${text.length}/200자`}
-                      fullWidth
-                    />
+                  <div className='form-wrap '>
+                  <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder="상품설명"
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '600px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                   </div>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>상품설명(관리자용)</th>
                 <td colSpan={3}>
-                  <div className='form-wrap row'>
-                    <TextField
-                      value={text}
-                      onChange={handleChange}
-                      inputProps={{ maxLength: 200 }}
-                      helperText={`${text.length}/200자`}
-                      fullWidth
-                    />
+                  <div className='form-wrap ss'>
+                  <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder="상품설명"
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '600px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                   </div>
                 </td>
               </tr>
@@ -381,34 +669,220 @@ export default function ProductAddPage() {
                       <label className='label'>
                         가로<span className='essential'>*</span>
                       </label>
-                      <TextField className='x-small' />
+          <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                       <span className='unit'>cm</span>
                     </li>
                     <li>
                       <label className='label'>
                         세로<span className='essential'>*</span>
                       </label>
-                      <TextField className='x-small' />
+                      <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                       <span className='unit'>cm</span>
                     </li>
                     <li>
                       <label className='label'>접착</label>
-                      <TextField className='x-small' />
+                      <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                       <span className='unit'>cm</span>
                     </li>
                     <li>
                       <label className='label'>헤다</label>
-                      <TextField className='x-small' />
+                      <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                       <span className='unit'>cm</span>
                     </li>
                     <li>
                       <label className='label'>두께</label>
-                      <TextField className='x-small' />
+                      <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                       <span className='unit'>cm</span>
                     </li>
                     <li>
                       <label className='label'>M자</label>
-                      <TextField className='x-small' />
+ <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                       <span className='unit'>cm</span>
                     </li>
                   </ul>
@@ -421,24 +895,145 @@ export default function ProductAddPage() {
                 <td colSpan={3}>
                   <div className='form-wrap row'>
                     <label className='label'>기본단위 (1묶음)</label>
-                    {/* <FormGroup row className='mr16' style={{ width: '130px' }}>
-                      <FormControlLabel className='ml0' control={<Checkbox />} label='기본단위 (1묶음)' />
-                    </FormGroup> */}
-                    <TextField sx={{ width: '120px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '120px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                     <span className='unit' style={{ marginRight: '16px' }}>
                       장
                     </span>
-                    <TextField sx={{ width: '150px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '150px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                     <span className='unit'>원</span>
                     <label className='label' style={{ marginLeft: '32px' }}>
                       장당
                     </label>
-                    <TextField sx={{ width: '80px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                     <span className='unit'>원</span>
                     <label className='label' style={{ marginLeft: '32px' }}>
                       할인율
                     </label>
-                    <TextField sx={{ width: '80px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                     <span className='unit'>%</span>
                   </div>
                   <div className='form-wrap row'>
@@ -446,69 +1041,291 @@ export default function ProductAddPage() {
                     {/* <FormGroup row className='mr16' style={{ width: '130px' }}>
                       <FormControlLabel className='ml0' control={<Checkbox />} label='대량구매 (1박스)' />
                     </FormGroup> */}
-                    <TextField sx={{ width: '120px' }} />
+                   <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '120px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                     <span className='unit' style={{ marginRight: '16px' }}>
                       장
                     </span>
-                    <TextField sx={{ width: '150px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '150px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                     <span className='unit'>원</span>
                     <label className='label' style={{ marginLeft: '32px' }}>
                       장당
                     </label>
-                    <TextField sx={{ width: '80px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                     <span className='unit'>원</span>
                     <label className='label' style={{ marginLeft: '32px' }}>
                       할인율
                     </label>
-                    <TextField sx={{ width: '80px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '80px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                     <span className='unit'>%</span>
                   </div>
-                  <div className='form-wrap row'>
+                  <div className='form-wrap '>
                     <FormGroup row className='mr16' style={{ width: '130px' }}>
                       <FormControlLabel className='ml0' control={<Checkbox />} label='가격 대체 문구' />
                     </FormGroup>
-                    <TextField value={text} fullWidth />
+ <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder="가격 대체 문구"
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '650px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                   </div>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>적립금</th>
                 <td>
+                <Controller
+rules={{ required: true }}
+control={control}
+name="isPosted"
+defaultValue={'Y'}
+render={(
+  {field}
+) => (
                   <RadioGroup row defaultValue='기본설정 사용'>
                     <FormControlLabel value='기본설정 사용' label='기본설정 사용' control={<Radio />} />
                     <FormControlLabel value='개별설정' label='개별설정' control={<Radio />} />
                   </RadioGroup>
+)}/>
                 </td>
                 <th scope='row'>포인트</th>
                 <td>
+                <Controller
+rules={{ required: true }}
+control={control}
+name="isPosted"
+defaultValue={'Y'}
+render={(
+  {field}
+) => (
                   <RadioGroup row defaultValue='기본설정 사용'>
                     <FormControlLabel value='기본설정 사용' label='기본설정 사용' control={<Radio />} />
                     <FormControlLabel value='개별설정' label='개별설정' control={<Radio />} />
                   </RadioGroup>
+                  )}/>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>옵션사용</th>
                 <td colSpan={3}>
+                <Controller
+rules={{ required: true }}
+control={control}
+name="isPosted"
+defaultValue={'Y'}
+render={(
+  {field}
+) => (
                   <RadioGroup row defaultValue='사용안함'>
                     <FormControlLabel value='사용함' label='사용함' control={<Radio />} />
                     <FormControlLabel value='사용안함' label='사용안함' control={<Radio />} />
                   </RadioGroup>
+                      )}/>
                 </td>
               </tr>
               <tr>
                 <th scope='row'>옵션사용</th>
                 <td colSpan={3}>
+                <Controller
+rules={{ required: true }}
+control={control}
+name="isPosted"
+defaultValue={'Y'}
+render={(
+  {field}
+) => (
                   <RadioGroup row defaultValue='사용함'>
                     <FormControlLabel value='사용함' label='사용함' control={<Radio />} />
                     <FormControlLabel value='사용안함' label='사용안함' control={<Radio />} />
                   </RadioGroup>
-                  <div className='form-wrap ss mt16'>
+                               )}/>
+                  <div className='form-wrap ss '>
                     <label className='label' style={{ minWidth: '100px' }}>
                       옵션 속성값
                     </label>
                     <div className='txt-wrap'>
-                      <TextField sx={{ minWidth: '800px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '600px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                       <p className='desc'>
                         예) 200장, 1000장, 5000장
                         <br />
@@ -521,7 +1338,38 @@ export default function ProductAddPage() {
                       옵션에 따른 가격
                     </label>
                     <div className='txt-wrap'>
-                      <TextField sx={{ minWidth: '800px' }} />
+                    <Controller
+                  rules={{ required: true }}
+                  control={control}
+                  name="orderNum2"
+                  defaultValue={''}
+                  render={(
+                    {
+                      field: { value, onChange, onBlur, ref },
+                      fieldState: { error },
+                    }
+                  ) => (
+                    <FormControl component="fieldset" >
+                      <TextField
+                        variant='outlined'
+                        name="orderNum2"
+                        placeholder=""
+                        inputRef={ref}
+                        value={value}
+                        onChange={onChange}
+                        onBlur={onBlur}
+                        error={Boolean(error)}
+                        sx={{ width: '600px' }} />
+                      <FormHelperText
+                        sx={{
+                          color: 'error.main',
+                        }}
+                      >
+                        {error?.message ?? ''}
+                      </FormHelperText>
+                    </FormControl>
+                  )}
+                />
                       <p className='desc'>
                         예) 1000,2000,3000
                         <br />
@@ -549,15 +1397,34 @@ export default function ProductAddPage() {
               <col style={{ width: 'auto' }} />
             </colgroup>
             <tbody>
-              <tr>
+            <tr>
                 <th scope='row' className='vat'>
-                  상품 이미지<span className='essential'>*</span>
+                 샘플 <span className='essential'>*</span>
                 </th>
                 <td>
-                  <RadioGroup row defaultValue='대표 이미지 등록' className='mt8'>
-                    <FormControlLabel value='대표 이미지 등록' label='대표 이미지 등록' control={<Radio />} />
-                    <FormControlLabel value='개별 이미지 등록' label='개별 이미지 등록' control={<Radio />} />
+
+
+                   <FileUpload />
+                </td>
+                </tr>
+              <tr>
+                <th scope='row' className='vat'>
+                  상품 이미지 Real <span className='essential'>*</span>
+                </th>
+                <td>
+                <Controller
+rules={{ required: true }}
+control={control}
+name="isPosted"
+defaultValue={true}
+render={(
+  {field}
+) => (
+                  <RadioGroup row defaultValue='대표 이미지 등록' className='mt8' onChange={()=>IsMainImageRadioChange}>
+                    <FormControlLabel value={true} label='대표 이미지 등록' control={<Radio />} />
+                    <FormControlLabel value={false} label='개별 이미지 등록' control={<Radio />} />
                   </RadioGroup>
+                          )}/>
                   <div className='thumb-wrap'>
                     <ul className='thumb-list'>
                       <li>
@@ -578,6 +1445,7 @@ export default function ProductAddPage() {
                         <span className='thumb' />
                         <span className='size'>권장 : 100 X 100(px)</span>
                       </li>
+
                     </ul>
                     <div className='txt-info'>
                       <strong>이미지 등록시 주의사항</strong>
@@ -594,9 +1462,9 @@ export default function ProductAddPage() {
                   상품 이미지<span className='essential'>*</span>
                 </th>
                 <td>
-                  <RadioGroup row defaultValue='대표 이미지 등록' className='mt8'>
-                    <FormControlLabel value='대표 이미지 등록' label='대표 이미지 등록' control={<Radio />} />
-                    <FormControlLabel value='개별 이미지 등록' label='개별 이미지 등록' control={<Radio />} />
+                  <RadioGroup row defaultValue='대표 이미지 등록' className='mt8' >
+                    <FormControlLabel value={true} label='대표 이미지 등록' control={<Radio />} />
+                    <FormControlLabel value={false} label='개별 이미지 등록' control={<Radio />} />
                   </RadioGroup>
                   <div className='thumb-wrap'>
                     <ul className='thumb-list'>
@@ -691,15 +1559,11 @@ export default function ProductAddPage() {
                       </li>
                     </ul>
                     <div className='txt-info'>
-                      <strong>이미지 등록시 주의사항</strong>
-                      <span>상품 복사 등록시, 상품 이미지는 복사되지 않습니다.</span>
-                      <span> 대표 이미지 등록하면 상세, 목록, 작은 목록에 자동생성됩니다.</span>
-                      <span>최대 용량 : 2MB</span>
-                      <span>파일형식 : jpg, png, gif</span>
-                      <Button variant='outlined' color='info' size='medium' className='icon mt8'>
+                {!isMainImageRadio &&   <Button variant='outlined' color='info' size='medium' className='icon mt8'>
                         <i className='delete' />
                         이미지 전체 삭제
-                      </Button>
+                      </Button>}
+
                     </div>
                   </div>
                 </td>
@@ -716,27 +1580,58 @@ export default function ProductAddPage() {
                     <br />
                     드래그 앤 드롭으로 이미지 순서 변경 가능합니다.
                   </span>
+
                   <div className='thumb-wrap'>
-                    <ul className='thumb-list draggable'>
-                      <li>
-                        <span className='thumb' />
-                        <IconButton className='icon'>
-                          <i className='drag' />
-                        </IconButton>
-                      </li>
-                      <li>
-                        <span className='thumb' />
-                        <IconButton className='icon'>
-                          <i className='drag' />
-                        </IconButton>
-                      </li>
-                      <li>
-                        <span className='thumb' />
-                        <IconButton className='icon'>
-                          <i className='drag' />
-                        </IconButton>
-                      </li>
-                    </ul>
+
+                     <div style={{ color: 'rgba(58, 53, 65, 0.24)', marginBottom: '16.9px' }}>
+                    <input
+                      type="file"
+                      id="fileUpload"
+                      style={{ display: "none" }} // label을 이용하여 구현하기에 없애줌
+                      multiple={true} // 파일 다중선택 허용
+                    />
+
+                    <label
+                      className={isDragging ? "fcc-DragDrop-File-Dragging" : "fcc-DragDrop-File"}
+                      // 드래그 중일때와 아닐때의 클래스 이름을 다르게 주어 스타일 차이
+
+                      htmlFor="fileUpload"
+                      ref={dragRef}
+                    >
+
+
+          <Icon fontSize={50} icon='octicon:file-directory-open-fill-16' />
+
+        <div className='Image-label'>
+          <Typography>- 최대 용량 : 2MB</Typography>
+          <Typography>- 파일형식 : jpg, png, gif</Typography>
+        </div>
+      </label></div>
+
+
+                    <div className="fcc-DragDrop-Files">
+                      {files.length > 0 &&
+                        files.map((file: IFileTypes) => {
+                          const {
+                            id,
+                            object: { name }
+                          } = file;
+
+                          return (
+                            <div key={id}>
+                              <div>{name}</div>
+                              <div
+                                className="DragDrop-Files-Filter"
+                                onClick={() => handleFilterFile(id)}
+                              // onClick 속성에 위처럼 함수를 추가시켜 줍니다.
+                              >
+                                X
+                              </div>
+                            </div>
+                          );
+                        })}
+
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -811,4 +1706,53 @@ export default function ProductAddPage() {
       </div>
     </>
   )
+}
+
+
+const EditorContainer = styled.div`
+    width: 100%;
+    height: 400px;
+
+    margin: 0 auto;
+`;
+
+const Contents = {
+  Container: styled.div`
+        width: 1200px;
+
+        margin: 0 auto;
+
+        display: flex;
+        gap: 40px;
+
+        & > div {
+            width: 600px;
+
+            padding: 16px;
+
+            box-sizing: border-box;
+        }
+    `,
+
+  HtmlContainer: styled.div`
+        border: 2px solid orange;
+    `,
+
+  ViewContainer: styled.div`
+        border: 2px solid olive;
+
+        // quill에서 가운데 정렬을 한 경우
+        .ql-align-center {
+            text-align: center;
+        }
+
+        // quill에서 코드 블럭을 사용한 경우
+        .ql-syntax {
+            background-color: #23241f;
+            color: #f8f8f2;
+            border-radius: 3px;
+            padding: 5px;
+            margin: 0 10px;
+        }
+    `,
 }

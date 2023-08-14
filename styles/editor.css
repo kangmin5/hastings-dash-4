@@ -40,4 +40,13 @@
   color: white;
   min-height: 200px;
 }
+
 /* https://codesandbox.io/s/wysiwyg-editor-demo-sjko5?file=/src/styles.css:0-672 */
+
+
+.product-editor-inline-box {
+  display: inline-flex;
+  width: 150px;
+  min-height: 150px;
+
+}
