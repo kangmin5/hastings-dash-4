@@ -127,7 +127,8 @@
     "quill-image-resize-module": "3.0.0",
     "quill-image-resize":"3.0.9",
     "currency.js": "^2.0.4",
-    "notistack": "^3.0.1"
+    "notistack": "^3.0.1",
+    "@mui/joy":"5.0.0"
 	},
 	"devDependencies": {
 		"@iconify/iconify": "3.1.0",

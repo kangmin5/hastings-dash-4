@@ -6,6 +6,10 @@ export class WorkAtom {
     public bizItem?: string, // 업종
     public corpNo?: string,
     public ceo?: string,
+    public phone?: string,
+    public fax?: string,
+    public email?: string,
+    public phone2?: string,
     public hasCompanyId?: boolean,
     public isValidBizNo?: boolean, // Only VO
     public isValidCorpNo?: boolean // Only VO
@@ -19,6 +23,10 @@ export class WorkDto {
   corpNo?: string
   ceo?: string
   hasCompanyId?: boolean
+  phone?: string
+  fax?: string
+  email?: string
+  phone2?: string
 
   constructor() {
     this.bizName = ''
@@ -28,6 +36,10 @@ export class WorkDto {
     this.corpNo = ''
     this.ceo = ''
     this.hasCompanyId = false
+    this.phone = ''
+    this.fax = ''
+    this.email = ''
+    this.phone2 = ''
 
   }
 
@@ -58,6 +70,19 @@ export class WorkDto {
   setHasCompanyId(hasCompanyId: boolean): void {
     this.hasCompanyId = hasCompanyId
   }
+  setPhone(phone: string): void {
+    this.phone = phone
+  }
+  setFax(fax: string): void {
+    this.fax = fax
+  }
+  setEmail(email: string): void {
+    this.email = email
+  }
+  setPhone2(phone2: string): void {
+    this.phone2 = phone2
+  }
+
 
   toJson() {
     return {
@@ -67,7 +92,12 @@ export class WorkDto {
       bizItem: this.bizItem,
       corpNo: this.corpNo,
       ceo: this.ceo,
-      hasCompanyId: this.hasCompanyId
+      hasCompanyId: this.hasCompanyId,
+      phone: this.phone,
+      fax: this.fax,
+      email: this.email,
+      phone2: this.phone2,
+
     }
   }
 }
@@ -82,7 +112,11 @@ export class WorkBuilder {
       bizItem: '',
       corpNo: '',
       ceo: '',
-      hasCompanyId: false
+      hasCompanyId: false,
+      phone: '',
+      fax: '',
+      email: '',
+      phone2: '',
 
     }
   }
@@ -115,9 +149,29 @@ export class WorkBuilder {
     this.instance.hasCompanyId = hasCompanyId
     return this
   }
+  phone(phone: string): WorkBuilder {
+    this.instance.phone = phone
+    return this
+  }
+  fax(fax: string): WorkBuilder {
+    this.instance.fax = fax
+    return this
+  }
+  email(email: string): WorkBuilder {
+    this.instance.email = email
+    return this
+
+  }
+  phone2(phone2: string): WorkBuilder {
+    this.instance.phone2 = phone2
+    return this
+  }
+
+
   build = (): WorkAtom => this.instance
   transform = (): WorkDto => {
-    const {  bizName, bizNo, corpNo } = this.instance
+    const {  bizName, bizNo, corpNo, bizItem, bizKind, ceo, hasCompanyId
+     } = this.instance
     const d = new WorkDto()
     d.setBizName(bizName)
     d.setBizNo(bizNo)
@@ -126,7 +180,7 @@ export class WorkBuilder {
     d.setBizKind(this.instance.bizKind)
     d.setCeo(this.instance.ceo)
     d.setHasCompanyId(this.instance.hasCompanyId)
-    
+
     return d
   }
 }

@@ -1,7 +1,10 @@
 export class ReceiptAtom {
   constructor(
 
-    public kind?: string) {}
+    public kind?: string,
+    public cashReceipt?: string,
+
+    ) {}
 }
 
 /*
@@ -24,20 +27,24 @@ purchaseOrderSummary
 
 export class ReceiptDto {
    kind: string
+   cashReceipt: string
 
   constructor() {
     this.kind = ''
+    this.cashReceipt = ''
   }
-  getKind(): string {
-    return this.kind
-  }
+
   setKind(kind: string): void {
     this.kind = kind
+  }
+  setCashReceipt(cashReceipt: string): void {
+    this.cashReceipt = cashReceipt
   }
 
   toJson() {
     return {
-      kind: this.kind
+      kind: this.kind,
+      cashReceipt: this.cashReceipt
     }
   }
 }
@@ -47,12 +54,17 @@ export class ReceiptBuilder {
 
   constructor() {
     this.instance = {
-      kind: ''
+      kind: '',
+      cashReceipt: ''
     }
   }
   kind = (kind: string): ReceiptBuilder => {
     this.instance.kind = kind
 
+    return this
+  }
+  cashReceipt = (cashReceipt: string): ReceiptBuilder => {
+    this.instance.cashReceipt = cashReceipt
     return this
   }
 
@@ -61,6 +73,7 @@ export class ReceiptBuilder {
   transform = (): ReceiptDto => {
     const d = new ReceiptDto()
     d.setKind(this.instance.kind)
+    d.setCashReceipt(this.instance.cashReceipt)
 
     return d
   }

@@ -1,41 +1,41 @@
 export class OarAtom {
-  constructor(public id?: string, public orderNo?: string, public status?: string, public qty?: string) {}
+  constructor(public id?: string, public orderNo?: string, public status?: string,
+    public orderLog?: string,
+    public qty?: string) {}
 }
 export class OarDto {
   id?: string
   orderNo?: string
   status?: string
   qty?: string
+  orderLog?: string
 
   constructor() {
     this.id = ''
     this.orderNo = ''
     this.status = ''
     this.qty = ''
+    this.orderLog = ''
   }
-  getId(): string {
-    return this.id!
-  }
+
   setId(id: string): void {
     this.id = id
   }
-  getOrderNo(): string {
-    return this.orderNo!
-  }
+
   setOrderNo(orderNo: string): void {
     this.orderNo = orderNo
   }
-  getStatus(): string {
-    return this.status!
-  }
+
   setStatus(status: string): void {
     this.status = status
   }
-  getQty(): string {
-    return this.qty!
-  }
+
   setQty(qty: string): void {
     this.qty = qty
+  }
+
+  setOrderLog(orderLog: string): void {
+    this.orderLog = orderLog
   }
 
   toJson() {
@@ -43,7 +43,8 @@ export class OarDto {
       id: this.id,
       orderNo: this.orderNo,
       status: this.status,
-      qty: this.qty
+      qty: this.qty,
+      orderLog: this.orderLog
     }
   }
 }
@@ -55,7 +56,8 @@ export class OarBuilder {
       id: '',
       orderNo: '',
       status: '',
-      qty: ''
+      qty: '',
+      orderLog: ''
     }
   }
   id(id: string): OarBuilder {
@@ -70,6 +72,10 @@ export class OarBuilder {
     this.instance.status = status
     return this
   }
+  orderLog(orderLog: string): OarBuilder {
+    this.instance.orderLog = orderLog
+    return this
+  }
   qty(qty: string): OarBuilder {
     this.instance.qty = qty
     return this
@@ -81,6 +87,7 @@ export class OarBuilder {
     d.setOrderNo(this.instance.orderNo)
     d.setStatus(this.instance.status)
     d.setQty(this.instance.qty)
+    d.setOrderLog(this.instance.orderLog)
 
     return d
   }

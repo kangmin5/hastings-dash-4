@@ -2,35 +2,39 @@ export class FeeAtom {
   constructor(
     public feeNo?: string,
     public payMethod?: string,
+    public payStatus?: string,
     ) {}
 }
 
 export class FeeDto {
    feeNo?: string
    payMethod?: string
+   payStatus?: string
 
 
   constructor() {
     this.feeNo = ''
     this.payMethod = ''
+    this.payStatus
   }
-  getFeeNo(): string {
-    return this.feeNo!
-  }
+
   setFeeNo(feeNo: string): void {
     this.feeNo = feeNo
   }
-  getPayMethod(): string {
-    return this.payMethod!
-  }
+
   setPayMethod(payMethod: string): void {
     this.payMethod = payMethod
+  }
+
+  setPayStatus(payStatus: string): void {
+    this.payStatus = payStatus
   }
 
   toJson() {
     return {
       feeNo: this.feeNo,
       payMethod: this.payMethod,
+      payStatus: this.payStatus
     }
   }
 }
@@ -41,6 +45,7 @@ export class FeeBuilder{
     this.instance = {
       feeNo: '',
       payMethod: '',
+      payStatus: ''
     }
   }
   feeNo(feeNo: string): FeeBuilder{
@@ -51,11 +56,16 @@ export class FeeBuilder{
     this.instance.payMethod = payMethod
     return this
   }
+  payStatus(payStatus: string): FeeBuilder{
+    this.instance.payStatus = payStatus
+    return this
+  }
 
   transform(): FeeDto {
     const d = new FeeDto()
     d.setFeeNo(this.instance.feeNo!)
     d.setPayMethod(this.instance.payMethod!)
+    d.setPayStatus(this.instance.payStatus!)
     return d
   }
   build(): FeeAtom {

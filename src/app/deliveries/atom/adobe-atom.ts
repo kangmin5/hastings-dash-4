@@ -56,7 +56,7 @@ export class AdobeDto {
   setShipExtraAddr(shipExtraAddr: string): void {
     this.shipExtraAddr = shipExtraAddr
   }
- 
+
   setShipZip(shipZip: string): void {
     this.shipZip = shipZip
   }

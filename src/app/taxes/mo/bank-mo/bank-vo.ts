@@ -1,4 +1,4 @@
-import { BankAtom, BankBuilder, BankDto } from 'app/taxes/atom/deposit-atom'
+import { DepositAtom, DepositBuilder, DepositDto } from 'app/taxes/atom/deposit-atom'
 import { TarAtom, TarBuilder, TarDto } from 'app/taxes/atom/tar-atom'
 
 export class BankVo {

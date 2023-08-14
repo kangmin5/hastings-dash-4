@@ -1,9 +1,11 @@
 export class DoorAtom {
   constructor(
-    public id?: string, 
+    public id?: string,
     public fee?: string,
     public status?: string,
     public kind?: string,
+    public message?: string
+
     ) {}
 }
 
@@ -12,12 +14,14 @@ export class DoorDto {
   fee?: string
   status?: string
   kind?: string
+  message?: string
 
   constructor() {
     this.id = ''
     this.fee = ''
     this.status = ''
     this.kind = ''
+    this.message = ''
   }
 
   setId(id: string): void {
@@ -35,12 +39,17 @@ export class DoorDto {
     this.kind = kind
   }
 
+  setMessage(message: string): void {
+    this.message = message
+  }
+
   toJson() {
     return {
       id: this.id,
       fee: this.fee,
       status: this.status,
-      kind: this.kind
+      kind: this.kind,
+      message: this.message
     }
   }
 }
@@ -52,7 +61,8 @@ export class DoorBuilder {
       id: '',
       fee: '',
       status: '',
-      kind: ''
+      kind: '',
+      message: ''
     }
   }
   id(id: string): DoorBuilder {
@@ -71,6 +81,10 @@ export class DoorBuilder {
     this.instance.kind = kind
     return this
   }
+  message(message: string): DoorBuilder {
+    this.instance.message = message
+    return this
+  }
 
   transform(): DoorDto {
     const d = new DoorDto()
@@ -78,6 +92,7 @@ export class DoorBuilder {
     d.setFee(this.instance.fee)
     d.setStatus(this.instance.status)
     d.setKind(this.instance.kind)
+    d.setMessage(this.instance.message)
 
     return d
   }
