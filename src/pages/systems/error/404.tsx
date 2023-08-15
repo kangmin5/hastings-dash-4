@@ -1,10 +1,10 @@
 import { NextPage } from "next";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
-import SEO from "../customers/cart/SEO";
-import BazaarImage from "../customers/cart/BazaarImage";
-import FlexBox from "../customers/cart/FlexBox";
-import FlexRowCenter  from "../customers/cart/FlexRowCenter";
+import SEO from "../../customers/cart/SEO";
+import BazaarImage from "../../customers/cart/BazaarImage";
+import FlexBox from "../../customers/cart/FlexBox";
+import FlexRowCenter  from "../../customers/cart/FlexRowCenter";
 
 const Error404: NextPage = () => {
   const router = useRouter();

@@ -1,4 +1,8 @@
-
+/*
+password
+passwordConfirm
+terms
+*/
 import React from 'react'
 import type { GetStaticProps, NextPage } from "next"
 import styled from 'styled-components';
@@ -37,17 +41,29 @@ interface IFileTypes {
   object: File;
 }
 // ** customer-service / faq-operator / register-faq 자주묻는 질문 등록
+const FaqZoo: any = z.object({
+  title: z.string().nonempty('제목은 필수값입니다'),
+  isPosted: z.string(),
+  expose: z.string(),
+  isPinned: z.string()
+});
+
+type FaqZoom = z.infer<typeof FaqZoo> & { unusedProperty: string };
+
 const FaqAddPage = () => {
+
+  const [htmlStr, setHtmlStr] = React.useState<string>('');
+  const [files, setFiles] = React.useState<IFileTypes[]>([]);
+  // ** next ReferenceError: window is not defined 해결 방법
+  // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
+  const [isDragging, setIsDragging] = React.useState<boolean>(false);
+  // 각 선택했던 파일들의 고유값 id
+  const fileId = React.useRef<number>(0);
+  // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
+  const dragRef = React.useRef<HTMLLabelElement | null>(null);
+  const roof = React.useRef<HTMLDivElement>(null);
+
   const dispatch = useAppDispatch()
-
-  const Zoo: any = z.object({
-    title: z.string().nonempty('제목은 필수값입니다'),
-    isPosted: z.string(),
-    expose: z.string(),
-    isPinned: z.string()
-  });
-
-  type Zookeeper = z.infer<typeof Zoo> & { unusedProperty: string };
 
   const {
     register,
@@ -55,7 +71,7 @@ const FaqAddPage = () => {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<Zookeeper>({
+  } = useForm<FaqZoom>({
     mode: "onSubmit",
     defaultValues: {
       title: "",
@@ -64,10 +80,8 @@ const FaqAddPage = () => {
       isPinned: "N"
 
     },
-    resolver: zodResolver(Zoo), // Useful to check TypeScript regressions
+    resolver: zodResolver(FaqZoo), // Useful to check TypeScript regressions
   });
-
-
 
     const onSubmit: SubmitHandler<any> = (data) => {
       console.log('공지사항 전송 테스트')
@@ -156,34 +170,10 @@ const FaqAddPage = () => {
     }
 
 
-    const [htmlStr, setHtmlStr] = React.useState<string>('');
-
-    const roof = React.useRef<HTMLDivElement>(null);
-
-    React.useEffect(() => {
-      if (roof.current) {
 
 
-        //  console.log(' ::::: 이미지 등록 ::::: \n', htmlStr)
-
-        //roof.current.innerHTML = '<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>'
-        //roof.current.innerHTML += htmlStr;
-      }
 
 
-    }, [htmlStr])
-
-    const [files, setFiles] = React.useState<IFileTypes[]>([]);
-    // ** next ReferenceError: window is not defined 해결 방법
-
-    // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
-    const [isDragging, setIsDragging] = React.useState<boolean>(false);
-
-    // 각 선택했던 파일들의 고유값 id
-    const fileId = React.useRef<number>(0);
-
-    // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
-    const dragRef = React.useRef<HTMLLabelElement | null>(null);
 
 
     const handleDragIn = React.useCallback((e: DragEvent): void => {
@@ -272,6 +262,20 @@ const FaqAddPage = () => {
       // 매개변수로 받은 id와 일치하지 않는지에 따라서 filter 해줍니다.
       setFiles(files.filter((file: any) => file.id !== id));
     }, [files]);
+
+    React.useEffect(() => {
+      if (roof.current) {
+
+
+        //  console.log(' ::::: 이미지 등록 ::::: \n', htmlStr)
+
+        //roof.current.innerHTML = '<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>'
+        //roof.current.innerHTML += htmlStr;
+      }
+
+
+    }, [htmlStr])
+
 
     React.useEffect(() => {
       initDragEvents();
@@ -380,8 +384,7 @@ render={(
                               {error?.message ?? ''}
                             </FormHelperText>
                           </FormControl>
-                        )}
-                      />
+)}/>
 
 <Controller
 

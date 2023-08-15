@@ -50,6 +50,7 @@ interface IFileTypes {
 export default function ProductAddPage() {
   const [text, setText] = React.useState('')
   const [isMainImageRadio, setIsMainImageRadio] = React.useState(true)
+
   const [htmlStr, setHtmlStr] = React.useState<string>('');
 
   const {
@@ -251,7 +252,7 @@ export default function ProductAddPage() {
       <Card>
         <div className='tit-wrap no-line ac'>
           <h3>상품 표시 정보</h3>
-          <Button variant='contained' color='primary' className='x-small icon ml8'>
+          <Button variant='contained' className='x-small icon ml8'>
             다른 상품 정보 가져오기
             <i className='link' />
           </Button>
@@ -1338,7 +1339,7 @@ render={(
                       옵션에 따른 가격
                     </label>
                     <div className='txt-wrap'>
-                    <Controller
+<Controller
                   rules={{ required: true }}
                   control={control}
                   name="orderNum2"
@@ -1359,7 +1360,8 @@ render={(
                         onChange={onChange}
                         onBlur={onBlur}
                         error={Boolean(error)}
-                        sx={{ width: '600px' }} />
+                        sx={{ width: '600px' }}
+                         />
                       <FormHelperText
                         sx={{
                           color: 'error.main',
@@ -1412,10 +1414,10 @@ render={(
                   상품 이미지 Real <span className='essential'>*</span>
                 </th>
                 <td>
-                <Controller
+<Controller
 rules={{ required: true }}
 control={control}
-name="isPosted"
+name="mainImage"
 defaultValue={true}
 render={(
   {field}
@@ -1424,7 +1426,7 @@ render={(
                     <FormControlLabel value={true} label='대표 이미지 등록' control={<Radio />} />
                     <FormControlLabel value={false} label='개별 이미지 등록' control={<Radio />} />
                   </RadioGroup>
-                          )}/>
+)}/>
                   <div className='thumb-wrap'>
                     <ul className='thumb-list'>
                       <li>
@@ -1462,10 +1464,19 @@ render={(
                   상품 이미지<span className='essential'>*</span>
                 </th>
                 <td>
+<Controller
+rules={{ required: true }}
+control={control}
+name="mainImage"
+defaultValue={true}
+render={(
+  {field}
+) => (
                   <RadioGroup row defaultValue='대표 이미지 등록' className='mt8' >
                     <FormControlLabel value={true} label='대표 이미지 등록' control={<Radio />} />
                     <FormControlLabel value={false} label='개별 이미지 등록' control={<Radio />} />
                   </RadioGroup>
+)}/>
                   <div className='thumb-wrap'>
                     <ul className='thumb-list'>
                       <li>
@@ -1513,10 +1524,19 @@ render={(
                   상품 이미지<span className='essential'>*</span>
                 </th>
                 <td>
+<Controller
+rules={{ required: true }}
+control={control}
+name="mainImage"
+defaultValue={true}
+render={(
+  {field}
+) => (
                   <RadioGroup row defaultValue='개별 이미지 등록' className='mt8'>
                     <FormControlLabel value='대표 이미지 등록' label='대표 이미지 등록' control={<Radio />} />
                     <FormControlLabel value='개별 이미지 등록' label='개별 이미지 등록' control={<Radio />} />
                   </RadioGroup>
+)}/>
                   <div className='thumb-wrap'>
                     <ul className='thumb-list'>
                       <li>
@@ -1648,10 +1668,16 @@ render={(
                     <br />
                     상품 공통정보 수정 페이지에서 등록/수정할 수 있습니다.
                   </span>
+ <Controller
+name='contactAutre'
+control={control}
+defaultValue={false}
+render={({ field }) => (
                   <FormGroup row className='mt8'>
-                    <FormControlLabel control={<Checkbox defaultChecked />} label='상품 상세 공통 사이즈  적용' />
-                    <FormControlLabel control={<Checkbox />} label='개별 사이즈  적용' />
+                    <FormControlLabel control={<Checkbox defaultChecked {...field} />} label='상품 상세 공통 사이즈  적용' />
+                    <FormControlLabel control={<Checkbox {...field} />} label='개별 사이즈  적용' />
                   </FormGroup>
+)}/>
                 </td>
               </tr>
               <tr>
@@ -1667,10 +1693,16 @@ render={(
                     <br />
                     드래그 앤 드롭으로 이미지 순서 변경 가능합니다.
                   </span>
+<Controller
+name='contactAutre'
+control={control}
+defaultValue={false}
+render={({ field }) => (
                   <FormGroup row className='mt8'>
-                    <FormControlLabel control={<Checkbox defaultChecked />} label='상품 상세 공통 사이즈  적용' />
-                    <FormControlLabel control={<Checkbox />} label='개별 사이즈  적용' />
+                    <FormControlLabel control={<Checkbox defaultChecked {...field} />} label='상품 상세 공통 사이즈  적용' />
+                    <FormControlLabel control={<Checkbox {...field} />} label='개별 사이즈  적용' />
                   </FormGroup>
+)}/>
                 </td>
               </tr>
               <tr>

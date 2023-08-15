@@ -525,3 +525,12 @@
 .purchase-orders.detail .tbl-view.type2 td {
   padding: 6px 0 !important;
 }
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+input[type="file"] {
+  display: none;
+}

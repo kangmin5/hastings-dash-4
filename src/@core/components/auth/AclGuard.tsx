@@ -14,7 +14,7 @@ import { AbilityContext } from 'layouts/components/acl/Can'
 import { buildAbilityFor } from 'configs/acl'
 
 // ** Component Import
-import NotAuthorized from 'pages/systems/error401'
+import NotAuthorized from 'pages/systems/error/error401'
 import Spinner from '@core/components/spinner'
 import BlankLayout from '@core/layouts/BlankLayout'
 

@@ -1,7 +1,16 @@
 import React from 'react';
 import PropTypes from "prop-types"
 import axios from 'axios';
-import Image from 'next/image'
+import {
+  Button,
+  Card,
+  FormControl,
+  Link,
+  MenuItem,
+  Select,
+  TextField,
+  FormHelperText
+} from '@mui/material'
 
 const BASE_URL = 'http://3.34.85.184/'
 const ADD_IMAGE = 'admin/products/product-image?do=add'
@@ -21,7 +30,7 @@ const UploadService = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-     // onUploadProgress,
+      // onUploadProgress,
     });
   },
 
@@ -43,7 +52,7 @@ const FileUpload = () => {
   const [progress, setProgress] = React.useState(0);
   const [message, setMessage] = React.useState("");
   const [imageInfos, setImageInfos] = React.useState([]);
-
+  const [isUpload, setIsUpload] = React.useState(false)
   React.useEffect(() => {
     // UploadService.getFiles().then((response) => {
     //   setImageInfos(response.data);
@@ -55,6 +64,7 @@ const FileUpload = () => {
     setPreviewImage(URL.createObjectURL(event.target.files[0]));
     setProgress(0);
     setMessage("");
+    setIsUpload(true)
   };
 
   const upload = () => {
@@ -67,7 +77,7 @@ const FileUpload = () => {
         // setMessage(response.data.message);
         // return UploadService.getFiles();
         const t = response.data.array[0]
-        console.log(' 이미지 업로드 성공'+JSON.stringify(t))
+        console.log(' 이미지 업로드 성공' + JSON.stringify(t))
         const img = t.urlAddress
         setPreviewImage(img)
       })
@@ -91,21 +101,38 @@ const FileUpload = () => {
     <div>
       <div className="row">
         <div className="col-8">
-          <img src={previewImage} style={{width:'50px', height:'50px'}} alt={''} />
-          <label className="btn btn-default p-0">
+          <img src={previewImage} style={{ width: '50px', height: '50px' }} alt={''} />
+          </div>
+          {!isUpload &&
+          <label  className="custom-file-upload">
             <input type="file" accept="image/*" onChange={selectFile} />
-          </label>
-        </div>
 
-        <div className="col-4">
+            {'등록'}
+
+
+          </label>
+}
+
+        {isUpload && <div className="col-4">
           <button
             className="btn btn-success btn-sm"
             disabled={!currentFile}
             onClick={upload}
           >
-            Upload
+            수정
           </button>
-        </div>
+          <button
+            className="btn btn-success btn-sm"
+            disabled={!currentFile}
+            onClick={ () => {
+              setPreviewImage(PREVIEW);
+              setIsUpload(false)}}
+          >
+            삭제
+          </button>
+        </div>}
+
+
       </div>
 
       {/* {currentFile && (

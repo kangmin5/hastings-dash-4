@@ -35,16 +35,17 @@ import { useSelector } from 'react-redux'
 import { ProductVo } from 'app/products/mo/product-mo/product-vo'
 const ProductPage: NextPage = ({ post }: Parameters) => {
   const [pageSize, setPageSize] = React.useState(10)
+  const [selectedRows, setSelectedRows] = React.useState<GridRowId[]>([])
   const dispatch = useAppDispatch()
+  const router = useRouter()
   const AllProducts = useSelector(selectAllProducts)
-  const count = useSelector(selectItemCount)
+  const itemCount = useSelector(selectItemCount)
   const countOfAll = useSelector(selectCountOfAll)
   const countOfSelling = useSelector(selectCountOfSelling)
   const countOfStopSelling = useSelector(selectCountOfStopSelling)
   const countOfDisplayed = useSelector(selectCountOfDisplayed)
   const countOfNoShow = useSelector(selectCountOfNoShow)
-  const [selectedRows, setSelectedRows] = React.useState<GridRowId[]>([])
-  const router = useRouter()
+
   const { id } = router.query
   interface CellType {
     row: ProductVo
