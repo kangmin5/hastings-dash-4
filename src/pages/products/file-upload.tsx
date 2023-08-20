@@ -49,10 +49,11 @@ const UploadService = {
 const FileUpload = () => {
   const [currentFile, setCurrentFile] = React.useState(undefined);
   const [previewImage, setPreviewImage] = React.useState(PREVIEW);
+  const [isUpload, setIsUpload] = React.useState(false)
   const [progress, setProgress] = React.useState(0);
   const [message, setMessage] = React.useState("");
   const [imageInfos, setImageInfos] = React.useState([]);
-  const [isUpload, setIsUpload] = React.useState(false)
+
   React.useEffect(() => {
     // UploadService.getFiles().then((response) => {
     //   setImageInfos(response.data);

@@ -23,16 +23,22 @@ const CatReducer = createSlice({
     },
     saveMainCategory(state, action: PayloadAction<string>) {
       state.mainCategory = action.payload
-      state.hasMainCategory = true
     },
     saveSubCategory(state, action: PayloadAction<string>) {
       state.subCategory = action.payload
-      state.hasSubCategory = true
+    },
+    saveHasMainCategory(state, action: PayloadAction<boolean>) {
+      state.hasMainCategory = action.payload
+    },
+    saveHasSubCategory(state, action: PayloadAction<boolean>) {
+      state.hasSubCategory = action.payload
     }
+
 
 
   }
 })
 
-export const { saveCat, saveMainCategory, saveSubCategory } = CatReducer.actions
+export const { saveCat, saveMainCategory, saveSubCategory
+, saveHasMainCategory, saveHasSubCategory } = CatReducer.actions
 export const catReducer = CatReducer.reducer

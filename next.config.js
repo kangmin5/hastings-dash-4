@@ -4,7 +4,9 @@
 
 module.exports = {
   images: {
-    domains: ['hastings-bucket-list.s3.ap-northeast-2.amazonaws.com'],
+    domains: ['hastings-bucket-list.s3.ap-northeast-2.amazonaws.com',
+'hrbongtoo-bucket.s3.ap-northeast-2.amazonaws.com'
+  ],
   },
- 
+
 };

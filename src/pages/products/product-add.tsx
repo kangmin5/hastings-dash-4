@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios';
 import type { GetStaticProps, NextPage } from "next"
 import { z } from 'zod'
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +27,7 @@ import ListItem from '@mui/material/ListItem'
 //import { styled } from '@mui/material/styles'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
+import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 import Typography, { TypographyProps } from '@mui/material/Typography'
 import { addProduct } from 'app/products/org/product-org/product-thunk';
 import { getAllCats } from 'app/products/org/cat-org/cat-thunk';
@@ -46,7 +48,8 @@ interface FileProp {
 
 import { ParBuilder } from 'app/products/atom/par-atom'
 import { ProductBo } from 'app/products/mo/product-mo/product-vo'
-import { saveMainCategory, saveSubCategory } from 'app/products/org/cat-org/cat-reducer';
+import { saveMainCategory, saveSubCategory,
+saveHasMainCategory, saveHasSubCategory } from 'app/products/org/cat-org/cat-reducer';
 
 interface IFileTypes {
   id: number; // 파일들의 고유값 id
@@ -429,10 +432,44 @@ interface Parameters {
 }
 
 const ProductAddPage: NextPage = () => {
+  const BASE_URL = 'http://3.34.85.184/'
+const ADD_IMAGE = 'admin/products/product-image?do=add'
+const PREVIEW = 'https://hrbongtoo-bucket.s3.ap-northeast-2.amazonaws.com/root/product/4/camera.png'
+const UploadService = {
+  upload: (file, onUploadProgress) => {
+    let formData = new FormData();
+
+    formData.append("file", file);
+
+    return axios.create({
+      baseURL: BASE_URL,
+      headers: {
+        "Content-type": "application/json",
+      },
+    }).post(ADD_IMAGE, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      // onUploadProgress,
+    });
+  },
+
+  getFiles: () => {
+    return axios.create({
+      baseURL: BASE_URL,
+      headers: {
+        "Content-type": "application/json",
+      },
+    }).get("/admin/products/product-image?id=");
+  }
+}
   const [text, setText] = React.useState('')
   const [isMainImageRadio, setIsMainImageRadio] = React.useState(true)
   const [htmlStr, setHtmlStr] = React.useState<string>('');
   const [inputList, setInputList] = React.useState(<></>);
+  const [currentFile, setCurrentFile] = React.useState(undefined);
+  const [previewImage, setPreviewImage] = React.useState(PREVIEW);
+  const [isUpload, setIsUpload] = React.useState(false)
   const AllCats = useSelector(selectAllCats)
   const hasMainCategory = useSelector(selectHasMainCategory)
   const hasSubCategory = useSelector(selectHasSubCategory)
@@ -454,6 +491,14 @@ const ProductAddPage: NextPage = () => {
     resolver: zodResolver(Z)
   });
   const dispatch = useAppDispatch()
+
+  const selectFile = (event) => {
+    setCurrentFile(event.target.files[0]);
+    setPreviewImage(URL.createObjectURL(event.target.files[0]));
+    setProgress(0);
+    setMessage("");
+    setIsUpload(true)
+  };
 
   const onSubmit: SubmitHandler<any> = (data) => {
     console.log('공지사항 전송 테스트')
@@ -514,8 +559,12 @@ const ProductAddPage: NextPage = () => {
 {arr2.map((item, index) => (
     <li className={'fcc-shine'}
     key={index}
-    style={{ width: '150px', height: '30px', border: '1px solid gray' }}
+    style={{ width: '150px', height: '30px',
+    border: '1px solid gray',
+    backgroundColor: (item.name === subCategory) ?'yellow':''
 
+
+  }}
 
     >
       <a href="#" onClick={()=>dispatch(saveSubCategory(`${item.name}`))}> {item.name} </a>
@@ -752,7 +801,9 @@ const ProductAddPage: NextPage = () => {
                               height: '30px',
                               border: '1px solid gray',
                               backgroundColor: (item.name === mainCategory) ?'yellow':'' }}>
-                                <a href="#" onClick={()=>dispatch(saveMainCategory(`${item.name}`))}> {item.name} </a>
+                                <a href="#" onClick={
+                                  ()=>{dispatch(saveMainCategory(`${item.name}`))
+                                  dispatch(saveHasMainCategory(true))}}> {item.name} </a>
                               </li>
                           ))}
                         </ul>
@@ -780,94 +831,37 @@ onClick={onAddBtnClick}
 
                       </div>
                       <div className='selected-area'>
-                        <p className='no-data'>선택된 상품분류 내역이 없습니다.</p>
+                        {mainCategory !=='' ?
+
+                        <>
+                            <span>{mainCategory} {'>'} {subCategory !=='' ? subCategory : ''}
+                           <Button variant='outlined' color='info' className='x-small icon' sx={{ width: '56px' }}
+
+onClick={
+  ()=>{
+    dispatch(saveMainCategory(''))
+    dispatch(saveSubCategory(''))
+    dispatch(saveHasMainCategory(false))
+    dispatch(saveHasSubCategory(false))
+  }
+
+}
+
+                             >
+                             <i className='delete' />
+                             삭제
+                           </Button>
+
+                        </span>
+                        </>
+                        :
+                        <><p className='no-data'>선택된 상품분류 내역이 없습니다.</p></>}
+
                       </div>
                     </div>
                   </td>
                 </tr>
-                <tr>
-                  <th scope='row' className='vat'>
-                    상품분류 선택
-                  </th>
-                  <td colSpan={3}>
-                    <div className='category-wrap'>
-                      <p className='desc'>상품분류 선택 후 적용 버튼을 눌러주세요.</p>
-                      <div className='category-list'>
-                        <ul>
-                          <Link href=''>
-                            <li>
 
-                              <Card elevation={5}>
-                                <CardHeader title="OPP 봉투" />
-                                <CardContent>
-                                </CardContent>
-
-                                <CardActions>
-                                </CardActions>
-                              </Card>
-                            </li>
-                          </Link>
-                          {/* <li>
-                          <a href='#none' className='link'>
-                       OPP 봉투     택배봉투 PP/PE 봉투 지퍼백
-                          </a>
-                        </li>
-                        <li className='active'>
-                          <a href='#none' className='link'>
-                            PP/PE 봉투
-                          </a>
-                        </li>
-                        <li>
-                          <a href='#none' className='link'>
-                            지퍼백
-                          </a>
-                        </li> */}
-                        </ul>
-                        <ul>
-                          <li className='selected'>
-                            <a href='#none'>PP속폴리백(접착)</a>
-                          </li>
-                          <li>
-                            <a href='#none'>PE속폴리백(접착)</a>
-                          </li>
-                          <li>
-                            <a href='#none'>PP속폴리백(접착)</a>
-                          </li>
-                          <li>
-                            <a href='#none'>PP속폴리백(접착)</a>
-                          </li>
-                          <li>
-                            <a href='#none'>PP속폴리백(접착)</a>
-                          </li>
-                        </ul>
-                        <div className='btn-wrap'>
-                          <Button variant='contained' size='small' color='primary' className='icon'>
-                            <i className='add' />
-                            적용
-                          </Button>
-                        </div>
-                      </div>
-                      <div className='selected-area'>
-                        <ul>
-                          <li>
-                            PP/PE 봉투 {'>'} PP속폴리백(접착)
-                            <Button variant='outlined' color='info' className='x-small icon ml8'>
-                              <i className='delete' />
-                              삭제
-                            </Button>
-                          </li>
-                          <li>
-                            PP/PE 봉투
-                            <Button variant='outlined' color='info' className='x-small icon ml8'>
-                              <i className='delete' />
-                              삭제
-                            </Button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
               </tbody>
             </table>
           </div>
@@ -1825,7 +1819,7 @@ onClick={onAddBtnClick}
                     <FileUpload />
                   </td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <th scope='row' className='vat'>
                     상품 이미지 Real <span className='essential'>*</span>
                   </th>
@@ -1834,7 +1828,7 @@ onClick={onAddBtnClick}
                       rules={{ required: true }}
                       control={control}
                       name="mainImage"
-                      defaultValue={true}
+                      defaultValue={'대표 이미지 등록'}
                       render={(
                         { field }
                       ) => (
@@ -1874,7 +1868,7 @@ onClick={onAddBtnClick}
                       </div>
                     </div>
                   </td>
-                </tr>
+                </tr> */}
                 <tr>
                   <th scope='row' className='vat'>
                     상품 이미지<span className='essential'>*</span>
@@ -1884,13 +1878,13 @@ onClick={onAddBtnClick}
                       rules={{ required: true }}
                       control={control}
                       name="mainImage"
-                      defaultValue={true}
+                      defaultValue={'개별 이미지 등록'}
                       render={(
                         { field }
                       ) => (
-                        <RadioGroup row defaultValue='대표 이미지 등록' className='mt8' >
-                          <FormControlLabel value={true} label='대표 이미지 등록' control={<Radio />} />
-                          <FormControlLabel value={false} label='개별 이미지 등록' control={<Radio />} />
+                        <RadioGroup row defaultValue='개별 이미지 등록' className='mt8' >
+                          <FormControlLabel value={'대표 이미지 등록'} label='대표 이미지 등록' control={<Radio />} />
+                          <FormControlLabel value={'개별 이미지 등록'} label='개별 이미지 등록' control={<Radio />} />
                         </RadioGroup>
                       )} />
                     <div className='thumb-wrap'>
@@ -1898,13 +1892,24 @@ onClick={onAddBtnClick}
                         <li>
                           <strong>상세 이미지</strong>
                           <span className='thumb'>
-                            <Image src={thumb} width='120' height='120' alt='' />
+                            {/* <Image src={thumb} width='120' height='120' alt='' /> */}
+                            <Image src={previewImage} width='120' height='120' alt='' />
                             <IconButton className='icon'>
                               <i className='delete2' />
                             </IconButton>
                           </span>
                           <span className='size'>권장 : 500 X 500(px)</span>
-                          <div className='btn-group'>
+
+                          {!isUpload &&  <div className='btn-group'>
+          <label  className="custom-file-upload">
+            <input type="file" accept="image/*" onChange={selectFile} />
+
+           등록
+
+
+          </label></div>
+}
+{isUpload &&   <div className='btn-group'>
                             <Button variant='outlined' color='info' className='x-small' sx={{ width: '56px' }}>
                               변경
                             </Button>
@@ -1912,7 +1917,7 @@ onClick={onAddBtnClick}
                               <i className='delete' />
                               삭제
                             </Button>
-                          </div>
+                          </div>}
                         </li>
                         <li>
                           <strong>목록 이미지</strong>
@@ -1935,7 +1940,7 @@ onClick={onAddBtnClick}
                     </div>
                   </td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <th scope='row' className='vat'>
                     상품 이미지<span className='essential'>*</span>
                   </th>
@@ -1944,7 +1949,7 @@ onClick={onAddBtnClick}
                       rules={{ required: true }}
                       control={control}
                       name="mainImage"
-                      defaultValue={true}
+                      defaultValue={'개별이미지등록'}
                       render={(
                         { field }
                       ) => (
@@ -2003,7 +2008,7 @@ onClick={onAddBtnClick}
                       </div>
                     </div>
                   </td>
-                </tr>
+                </tr> */}
                 <tr>
                   <th scope='row' className='vat'>
                     추가 이미지
