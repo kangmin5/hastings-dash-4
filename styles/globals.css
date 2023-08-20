@@ -1413,5 +1413,12 @@ table {
   display: inline-flex;
   width: 720px;
   min-height: 400px;
-  border: 1px solid #d6dbe2;
+  
 }
+.fcc-shine  {
+  background-color: #ede7e7;
+  position: relative;
+}
+
+.fcc-shine a:focus
+{     background-color:yellow;    }

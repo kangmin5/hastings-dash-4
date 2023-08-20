@@ -4,7 +4,7 @@ import { CatVo } from 'app/products/mo/cat-mo/cat-vo'
 import { CatFactory as factory } from './cat-factory'
 import { CatAction as action, CatStrategy as strategy } from './cat-union'
 import { CatDao as dao } from './cat-dao'
-import { addCat, getAllCategories, getCategoriesBy, getCatById, alterCatById, delCatById } from './cat-thunk'
+import { addCat, getAllCats, getCatsBy, getCatById, alterCatById, delCatById } from './cat-thunk'
 import { TroubleVo as TV } from 'app/systems/org/trouble-org/trouble-vo'
 import { TroubleDao as TD } from 'app/systems/org/trouble-org/trouble-dao'
 import { TroubleAspect as TA } from 'app/systems/org/trouble-org/trouble-aspect'
@@ -37,7 +37,7 @@ const CatSlice = createSlice({
       .addCase(addCat.fulfilled, (state, { payload }) => {
         console.log('자주묻는 질문 게시판 프론트에서는 추가하기 기능이 없습니다. ')
       })
-      .addCase(getAllCategories.fulfilled, (state, { payload }) => {
+      .addCase(getAllCats.fulfilled, (state, { payload }) => {
         const queryIsGood = TA.check().isGoodQuery(payload)
         const authorHasToken = TA.check().hasToken(payload)
         if (queryIsGood && authorHasToken) {
@@ -54,7 +54,7 @@ const CatSlice = createSlice({
         }
       })
 
-      .addCase(getCategoriesBy.fulfilled, (state, { payload }) => {
+      .addCase(getCatsBy.fulfilled, (state, { payload }) => {
         if (TA.check().isGoodQuery(payload)) {
           state.itemsBy = dao.addOneSuccess(payload)
         } else {
@@ -83,7 +83,7 @@ const CatSlice = createSlice({
           console.log(`[Error Issue] ${DateMap().get()} 자주묻는 질문 삭제작업 : 쿼리 체크 Error `)
         }
       })
-      .addCase(getAllCategories.rejected, (state, { payload }) => {
+      .addCase(getAllCats.rejected, (state, { payload }) => {
         TD.rejectedTrouble(`[Reject Issue] ${DateMap().get()} 자주묻는 질문 전체목록 : 서버연결 실패 `)
       })
   }

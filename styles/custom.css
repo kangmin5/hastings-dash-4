@@ -413,7 +413,7 @@
 .category-wrap .category-list {
   position: relative;
   border: solid 1px rgba(88, 93, 114, 0.1);
-  width: 100%;
+
   display: table;
 }
 /* .category-wrap .category-list> div {
@@ -447,7 +447,7 @@
   border-right: 1px solid rgba(88, 93, 114, 0.1);
   display: table-cell;
   min-height: 164px;
-  width: 202px;
+  width: 164px;
   height: calc(100% - 1px);
   overflow: hidden;
 }

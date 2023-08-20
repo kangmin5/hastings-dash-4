@@ -75,7 +75,7 @@ const OrderAddPage: NextPage = () => {
     orderLog: z.string(),
   });
 
-  type Zookeeper = z.infer<typeof Zoo> & { unusedProperty: string };
+  type Zoom = z.infer<typeof Zoo> & { unusedProperty: string };
 
   const {
     register,
@@ -83,7 +83,7 @@ const OrderAddPage: NextPage = () => {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<Zookeeper>({
+  } = useForm<Zoom>({
     mode: "onSubmit",
     defaultValues: {
     orderNum1: '테스트',

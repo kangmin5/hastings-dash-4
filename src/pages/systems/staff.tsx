@@ -164,7 +164,7 @@ const OrderColumn = (): GridColDef[] => (
   ]
 )
 
-const OrderPage: NextPage = ({ post }: Parameters) => {
+const StaffPage: NextPage = ({ post }: Parameters) => {
   const [pageSize, setPageSize] = React.useState(10)
   const [memberRadio, setMemberRadio] = React.useState<string>('all')
   const [funnelRadio, setFunnelRadio] = React.useState<string>('all')
@@ -226,7 +226,7 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
 
 
   React.useEffect(() => {
-    dispatch(getAllOrders(undefined))
+   // dispatch(getAllOrders(undefined))
   }, [dispatch, router.query])
 
   return (
@@ -442,6 +442,6 @@ const OrderPage: NextPage = ({ post }: Parameters) => {
 
     </>)
 }
-export default OrderPage;
+export default StaffPage;
 
 //** https://github.com/colinhacks/zod/blob/master/src/benchmarks/realworld.ts

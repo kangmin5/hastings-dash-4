@@ -50,6 +50,7 @@ import { CartSlice as cart } from 'app/customers/org/cart-org/cart-dao'
 import { NoteSlice as notes } from 'app/customers/org/note-org/note-dao'
 import { TunnelSlice as tunnels } from 'app/customers/org/tunnel-org/tunnel-dao'
 import { CatSlice as cats } from 'app/products/org/cat-org/cat-dao'
+import { catReducer as cat } from 'app/products/org/cat-org/cat-reducer'
 import { ProductSlice as products } from 'app/products/org/product-org/product-dao'
 import { productReducer as product } from 'app/products/org/product-org/product-reducer'
 import { AskSlice as asks } from 'app/products/org/ask-org/ask-dao'
@@ -108,7 +109,7 @@ export const store = configureStore({
     addrs,
     addr,
     cart,
-    cats, schedules,
+    cats,cat, schedules,
     products,
     product,
     orders,

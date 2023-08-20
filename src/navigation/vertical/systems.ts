@@ -11,20 +11,24 @@ export default function navigation(): VerticalNavItemsType {
       children: [
         {
           title: '사원 관리',
-          path: '/systems/employ'
+          path: '/systems/staff'
+        },
+        {
+          title: '사원 등록',
+          path: '/systems/staff-add'
         }
       ]
     },
 
-    {
-      id: '1',
-      title: '채용 관리',
-      children: [
-        {
-          title: '이력서 관리',
-          path: '/systems/resume'
-        }
-      ]
-    }
+    // {
+    //   id: '1',
+    //   title: '채용 관리',
+    //   children: [
+    //     {
+    //       title: '이력서 관리',
+    //       path: '/systems/resume'
+    //     }
+    //   ]
+    // }
   ]
 }

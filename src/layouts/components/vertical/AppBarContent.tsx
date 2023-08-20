@@ -135,7 +135,7 @@ interface Props {
 
 const gnbData = [
   // { id: 1, name: ' 대시보드 ' },
-  // { id: 2, name: ' 쇼핑몰 구축 ' },
+  { id: 2, name: ' 쇼핑몰 관리 ' },
   { id: 3, name: ' 상품관리 ' },
   { id: 4, name: ' 주문관리 ' },
   { id: 5, name: ' 회원관리 ' },

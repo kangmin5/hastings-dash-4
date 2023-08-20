@@ -183,7 +183,7 @@ render={(
                       </FormHelperText>
          </FormControl>
 )}/>
-          <Controller
+<Controller
 rules={{ required: true }}
 control={control}
 name="passwordConfirm"
@@ -214,6 +214,18 @@ render={(
                       </FormHelperText>
          </FormControl>
 )}/>
+
+<Controller
+rules={{ required: true }}
+control={control}
+name="passwordConfirm"
+defaultValue={''}
+render={(
+  {
+    field: { value, onChange, onBlur, ref },
+    fieldState: { error },
+  }
+) => (
           <FormGroup>
             <FormControlLabel
               control={<Checkbox required />}
@@ -228,7 +240,7 @@ render={(
               {errors['terms'] ? errors['terms'].message : ''}
             </FormHelperText>
           </FormGroup>
-
+)}/>
           <LoadingButton
             variant='contained'
             fullWidth
